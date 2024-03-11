@@ -29,6 +29,7 @@ export const validateSignUp = async (
     });
   } catch (error) {
     res.status(400).json(error);
+    return;
   }
 
   next();
