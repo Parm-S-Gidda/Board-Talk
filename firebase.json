@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "whiteboard-client/public",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
