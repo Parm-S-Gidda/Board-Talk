@@ -6,8 +6,6 @@ import './style.css';
 class Board extends React.Component {
 
     timeout;
-   // socket = io.connect("http://localhost:5000");
-
     socket;
 
    
@@ -18,11 +16,10 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
 
-        this.socket = new WebSocket('ws://'
-        + "127.0.0.1:8000"
+        this.socket = new WebSocket('wss://'
+        + "whiteboard-service-2pmnanshaq-uw.a.run.app"
         + '/ws/whiteboard/'
-        + 1
-        + '/');
+        + 1);
 
         this.socket.onopen = () => {
             console.log("WebSocket connection established.");
@@ -47,7 +44,7 @@ class Board extends React.Component {
                 var ctx = canvas.getContext('2d');
                 image.onload = function() {
 
-                    console.log("on loading lskafjd;alkj")
+                   
                     ctx.drawImage(image, 0, 0);
 
                     root.isDrawing = false;
@@ -55,17 +52,13 @@ class Board extends React.Component {
 
                
 
-                console.log("about to sl;fjksl;a")
+             
               
 
                 try {
                     var jsonData = JSON.parse(event.data);
                     var messageValue = jsonData.message;
-                   // messageValue = messageValue.substring(0, 37000);
-
-                    var choppedStr = messageValue.substring(5);
-                  //  console.log(choppedStr);
-                    //console.log("it worked?")
+                 
                 } catch (error) {
                     console.error('Error parsing JSON:', error);
                 }
@@ -75,12 +68,7 @@ class Board extends React.Component {
             }, 200)
         })
         
-        /*
-        this.socket.addEventListener('message', function(event) {
-            console.log('Message received:', event.data);
-            // Handle incoming message data here...
-        });
-        */
+
         
     }
 
@@ -143,14 +131,12 @@ class Board extends React.Component {
             root.timeout = setTimeout(function(){
                 var base64ImageData = canvas.toDataURL("image/png");
 
-                console.log("about to send")
-
                 root.socket.send(JSON.stringify({ event: "canvas-data", data: base64ImageData }));
                 console.log("sent data");
             }, 1000) 
         };
 
-        //35121
+   
     }
 
     render() {
