@@ -25,12 +25,15 @@ SECRET_KEY = "django-insecure-@6*q0f-+8*ug__l1lphi$4(3*ny(&gpq&fs38bvbvoyd!9y+9#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["whiteboard-service-2pmnanshaq-uw.a.run.app", "127.0.0.1", "cmpt-474-cdc96.web.app/"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
+    "whiteboard_service",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -68,7 +71,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "whiteboard.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -121,3 +123,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Channels
+ASGI_APPLICATION = "whiteboard.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("10.77.253.139", 6379)],
+        },
+    },
+}
