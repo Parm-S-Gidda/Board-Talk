@@ -1,6 +1,5 @@
 import Button from "../components/NotificationButton";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Notification = {
   title: string
@@ -10,7 +9,7 @@ type Notification = {
 var notificationsReceived: Notification
 
 function Dashboard() {
-  ShowNotifications()
+  const navigate = useNavigate()
   return(
     <>
       <br></br>
@@ -18,7 +17,7 @@ function Dashboard() {
         border="solid"
         color="white"
         height = "50px"
-        onClick={() => alert(notificationsReceived.title + "  " + notificationsReceived.body)}
+        onClick={() => navigate("/notification")}
         radius = "0%"
         width = "200px"
         children = "Notifications"
@@ -27,32 +26,5 @@ function Dashboard() {
   ) 
 }
 
-function ShowNotifications() {
-  const [data, setdata] = useState({
-      title: "",
-      body: ""
-  });
-
-  function getData() {
-    axios({
-      method: "GET",
-      url:"/notifications",
-    })
-    .then((response) => {
-      const res =response.data
-      setdata(({
-        title: res.title,
-        body: res.body}))
-        notificationsReceived = data as Notification
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-        }
-    })}
-
-    getData()
-}
 
 export default Dashboard;

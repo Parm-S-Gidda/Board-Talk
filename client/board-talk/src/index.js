@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import SignUp from './routes/Signup';
 import Dashboard from './routes/Dashboard';
+import Notification from './routes/Notification'
 import { UserProvider } from "./context/userContext"
 
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />
+  },
+  {
+    path: "/notification",
+    element: <Notification />
   }
   ,
 ]);
