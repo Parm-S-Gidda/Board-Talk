@@ -6,7 +6,11 @@ import './style.css';
 class Board extends React.Component {
 
     timeout;
-    socket = io.connect("http://localhost:5000");
+   // socket = io.connect("http://localhost:5000");
+
+    socket;
+
+   
 
     ctx;
     isDrawing = false;
@@ -14,24 +18,70 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
 
-        this.socket.on("canvas-data", function(data){
+        this.socket = new WebSocket('ws://'
+        + "127.0.0.1:8000"
+        + '/ws/whiteboard/'
+        + 1
+        + '/');
+
+        this.socket.onopen = () => {
+            console.log("WebSocket connection established.");
+        };
+
+        
+        this.socket.addEventListener('message', function(event){
+            
+            console.log("got message");
+
+            console.log(event.data)
 
             var root = this;
             var interval = setInterval(function(){
+         
                 if(root.isDrawing) return;
+          
                 root.isDrawing = true;
                 clearInterval(interval);
                 var image = new Image();
                 var canvas = document.querySelector('#board');
                 var ctx = canvas.getContext('2d');
                 image.onload = function() {
+
+                    console.log("on loading lskafjd;alkj")
                     ctx.drawImage(image, 0, 0);
 
                     root.isDrawing = false;
                 };
-                image.src = data;
+
+               
+
+                console.log("about to sl;fjksl;a")
+              
+
+                try {
+                    var jsonData = JSON.parse(event.data);
+                    var messageValue = jsonData.message;
+                   // messageValue = messageValue.substring(0, 37000);
+
+                    var choppedStr = messageValue.substring(5);
+                  //  console.log(choppedStr);
+                    //console.log("it worked?")
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                }
+          
+                image.src = messageValue;
+
             }, 200)
         })
+        
+        /*
+        this.socket.addEventListener('message', function(event) {
+            console.log('Message received:', event.data);
+            // Handle incoming message data here...
+        });
+        */
+        
     }
 
     componentDidMount() {
@@ -88,12 +138,19 @@ class Board extends React.Component {
             ctx.closePath();
             ctx.stroke();
 
+            
             if(root.timeout != undefined) clearTimeout(root.timeout);
             root.timeout = setTimeout(function(){
                 var base64ImageData = canvas.toDataURL("image/png");
-                root.socket.emit("canvas-data", base64ImageData);
-            }, 1000)
+
+                console.log("about to send")
+
+                root.socket.send(JSON.stringify({ event: "canvas-data", data: base64ImageData }));
+                console.log("sent data");
+            }, 1000) 
         };
+
+        //35121
     }
 
     render() {

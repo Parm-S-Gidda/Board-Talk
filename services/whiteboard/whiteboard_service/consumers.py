@@ -8,6 +8,7 @@ class WhiteBoardConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = "chat_%s" % self.room_name
 
+        
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name, self.channel_name
@@ -23,8 +24,11 @@ class WhiteBoardConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
+
+        print("got message")
+
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        message = text_data_json["data"]
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -33,6 +37,8 @@ class WhiteBoardConsumer(AsyncWebsocketConsumer):
 
     # Receive message from room group
     async def chat_message(self, event):
+
+        print("recieved message")
         message = event["message"]
         sender_channel = event["sender_channel"]
 
