@@ -1,4 +1,5 @@
 import Button from "../components/NotificationButton";
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 type Notification = {
@@ -9,7 +10,7 @@ type Notification = {
 var notificationsReceived: Notification
 
 function Dashboard() {
-  notificationsReceived = ShowNotifications() as Notification
+  ShowNotifications()
   return(
     <>
       <br></br>
@@ -32,20 +33,26 @@ function ShowNotifications() {
       body: ""
   });
 
-  useEffect(() => {
-    fetch("/notifications").then((res) =>
-      res.json().then((data) => {
-        setdata({
-          title: data.title,
-          body: data.body,
-        });
-        console.log(data)
-      })
-    );
-  }, []);
+  function getData() {
+    axios({
+      method: "GET",
+      url:"/notifications",
+    })
+    .then((response) => {
+      const res =response.data
+      setdata(({
+        title: res.title,
+        body: res.body}))
+        notificationsReceived = data as Notification
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response)
+        console.log(error.response.status)
+        console.log(error.response.headers)
+        }
+    })}
 
-
-  return data
+    getData()
 }
 
 export default Dashboard;
