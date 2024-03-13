@@ -17,7 +17,7 @@ function Notification() {
             <br></br>
 
             <div id="notificationInfo">
-                <p>Title: {notificationsReceived.title}</p>
+                <p>Title: {notificationsReceived.title }</p>
                 <p>Body: {notificationsReceived.body}</p>
             </div>
 
