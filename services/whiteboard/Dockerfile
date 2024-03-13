@@ -10,4 +10,5 @@ ADD . /whiteboard_service/
 
 RUN pip install -r requirements.txt
 
+ENV PORT=8080
 EXPOSE 8080
