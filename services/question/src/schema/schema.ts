@@ -3,7 +3,7 @@ import { timestamp, varchar } from "drizzle-orm/pg-core";
 import { pgTable } from "drizzle-orm/pg-core";
 
 export const questions = pgTable("questions", {
-  question_id: varchar("question_id"),
+  question_id: varchar("question_id").primaryKey(),
   title: varchar("title"),
   content: varchar("content"),
   user_id: varchar("user_id"),
@@ -11,7 +11,7 @@ export const questions = pgTable("questions", {
 });
 
 export const answers = pgTable("answers", {
-  answer_id: varchar("answer_id"),
+  answer_id: varchar("answer_id").primaryKey(),
   content: varchar("content"),
   createdAt: timestamp("createdAt"),
   question_id: varchar("question_id"),

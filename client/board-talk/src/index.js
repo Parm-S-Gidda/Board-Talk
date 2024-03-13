@@ -13,6 +13,7 @@ import Dashboard from './routes/Dashboard';
 import { UserProvider } from "./context/userContext"
 import Question from "./routes/Question"
 import QuestionCreate from "./routes/Question-Create"
+import Container from './routes/container/Container';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/question-create",
     element: <QuestionCreate />
+  },
+  {
+    path: "/whiteboard",
+    element: <Container />
   }
   ,
 ]);

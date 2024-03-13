@@ -104,6 +104,10 @@ function Dashboard() {
     navigate("/question-create");
   };
 
+  const onWhiteboard = () => {
+    navigate("/whiteboard");
+  };
+
   return (
     <div className="w-screen h-screen">
       <div className="w-screen h-screen grid grid-cols-4 gap-y-7 p-10">
@@ -111,7 +115,13 @@ function Dashboard() {
           questions.map((question) => <QuestionCard question={question} />)}
       </div>
 
-      <div className="fixed bottom-20 right-20 flex">
+      <div className="fixed bottom-20 right-20 flex gap-x-10">
+        <button
+          className="bg-gray-700 w-40 h-16 rounded-3xl shadow-2xl text-white"
+          onClick={onWhiteboard}
+        >
+          Start a whiteboard
+        </button>
         <button
           className="bg-gray-700 w-36 h-16 rounded-3xl shadow-2xl text-white"
           onClick={onPostQuestion}

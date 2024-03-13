@@ -81,7 +81,7 @@ function Question() {
 
         answers.forEach((answer) => {
           users.forEach((user) => {
-            if ((user.user_id = answer.author_id)) {
+            if (user.user_id == answer.author_id) {
               answerProcessed.push({
                 answer_id: answer.answer_id,
                 author: user,

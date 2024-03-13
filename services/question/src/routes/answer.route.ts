@@ -7,7 +7,7 @@ import { createAnswer, getAnswers } from "../controllers/answer.controller";
 
 const answerRouter = express.Router();
 
-answerRouter.get("/", validateGetAnswer, getAnswers);
+answerRouter.get("/", getAnswers);
 answerRouter.post("/", validatePostAnswer, createAnswer);
 
 export default answerRouter;

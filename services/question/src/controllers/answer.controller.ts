@@ -9,8 +9,9 @@ import {
 } from "../services/answer.service";
 
 export const getAnswers = async (req: Request, res: Response) => {
+  const question_id = req.query.question_id as string;
   const request: GetAnswerRequest = {
-    question_id: req.body.question_id,
+    question_id: question_id,
   };
 
   const answers = await getAnswersService(request);
