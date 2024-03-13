@@ -1,8 +1,9 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { SIGN_UP_END_POINT } from "../utils/endpoints";
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
+import { User } from "./Dashboard";
 
 type FormType = {
   name: string;
@@ -25,8 +26,13 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const resp = await axios.post(SIGN_UP_END_POINT, form);
-      updateUser(resp.data);
+      const resp: AxiosResponse<User[]> = await axios.post(
+        SIGN_UP_END_POINT,
+        form
+      );
+
+      console.log("signup:", resp.data);
+      updateUser(resp.data[0]);
       navigate("/dashboard");
     } catch (error) {
       console.log(error);

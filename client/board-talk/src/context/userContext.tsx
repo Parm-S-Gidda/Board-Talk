@@ -3,7 +3,8 @@ import { createContext, useState } from "react";
 type User = {
   email: string;
   name: string;
-  password: string;
+  user_id: string;
+  createdAt: string;
 };
 
 type UserContext = {
@@ -17,7 +18,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User>({
     email: "",
     name: "",
-    password: "",
+    createdAt: "",
+    user_id: "",
   });
 
   const updateUser = (user: User) => {

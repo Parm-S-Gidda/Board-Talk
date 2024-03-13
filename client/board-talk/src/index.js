@@ -11,6 +11,8 @@ import {
 import SignUp from './routes/Signup';
 import Dashboard from './routes/Dashboard';
 import { UserProvider } from "./context/userContext"
+import Question from "./routes/Question"
+import QuestionCreate from "./routes/Question-Create"
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />
+  },
+  {
+    path: "/question",
+    element: <Question />
+  },
+  {
+    path: "/question-create",
+    element: <QuestionCreate />
   }
   ,
 ]);
