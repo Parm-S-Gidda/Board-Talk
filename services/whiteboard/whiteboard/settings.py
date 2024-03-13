@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-@6*q0f-+8*ug__l1lphi$4(3*ny(&gpq&fs38bvbvoyd!9y+9#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["whiteboard-service-2pmnanshaq-uw.a.run.app", "127.0.0.1"]
+ALLOWED_HOSTS = ["whiteboard-service-2pmnanshaq-uw.a.run.app", "127.0.0.1", "cmpt-474-cdc96.web.app/"]
 
 
 # Application definition
