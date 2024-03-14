@@ -14,8 +14,13 @@ app.use(express.json());
 
 app.use("/api/questions", questionRouter);
 app.use("/api/answers", answerRouter);
+app.use("/health", (req: Request, res: Response) => [
+  res.status(200).json({
+    message: "works",
+  }),
+]);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
