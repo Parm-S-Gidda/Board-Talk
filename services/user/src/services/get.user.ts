@@ -12,5 +12,5 @@ export const getUser = async (user_id: string) => {
     return user;
   }
 
-  return user![0];
+  return user[0];
 };
