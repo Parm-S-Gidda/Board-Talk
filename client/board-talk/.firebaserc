@@ -1,5 +1,9 @@
 {
   "projects": {
+<<<<<<< HEAD
     "default": "cmpt474-project-76635"
+=======
+    "default": "cmpt-474-group-project"
+>>>>>>> origin/ikenna-deploy
   }
 }
