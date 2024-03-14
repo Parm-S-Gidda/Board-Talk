@@ -51,7 +51,7 @@ class Container extends React.Component
                 </div>
 
                 <div class="board-container">
-                    <Board color={this.state.color} size={this.state.size}></Board>
+                    <Board color={this.state.color} size={this.state.size} roomID={this.props.roomID}></Board>
                 </div>
             </div>
         )

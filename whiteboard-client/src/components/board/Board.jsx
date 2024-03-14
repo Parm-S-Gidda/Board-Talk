@@ -17,9 +17,9 @@ class Board extends React.Component {
         super(props);
 
         this.socket = new WebSocket('wss://'
-        + "whiteboard-service-2pmnanshaq-uw.a.run.app"
+        + "whiteboard-service-fxsolq3pha-uw.a.run.app"
         + '/ws/whiteboard/'
-        + 1
+        + this.props.socketURL
         + '/');
 
         this.socket.onopen = () => {
