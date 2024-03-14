@@ -15,6 +15,12 @@ const port = process.env.port;
 
 app.use("/api/users", userRouter);
 
+app.use("/health", (req: Request, res: Response) => {
+  res.status(200).json({
+    message: "works",
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
