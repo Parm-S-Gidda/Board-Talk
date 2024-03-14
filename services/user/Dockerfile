@@ -5,4 +5,4 @@ RUN npm install
 COPY . .
 EXPOSE 5000
 RUN npm run build
-CMD ["node", "./dist/app.js"]
+CMD ["node", "./dist/src/app.js"]
