@@ -1,5 +1,5 @@
 import React from 'react';
-import io from 'socket.io-client';
+
 
 import './style.css';
 
@@ -16,11 +16,13 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
 
-        this.socket = new WebSocket('wss://'
-        + "whiteboard-service-2pmnanshaq-uw.a.run.app"
-        + '/ws/whiteboard/'
-        + 1
-        + '/');
+        this.socket = new WebSocket(
+            "wss://" +
+              "whiteboard-service-nf23qxdm2q-uc.a.run.app" +
+              "/ws/whiteboard/" +
+              1 +
+              "/"
+          );
 
         this.socket.onopen = () => {
             console.log("WebSocket connection established.");
