@@ -1,40 +1,47 @@
+import { Datastore } from "@google-cloud/datastore";
 import db from "../configs/db.config";
 import { PostQuestionRequest } from "../middlewares/validator.requests";
 import { questions } from "../schema/schema";
 import { v4 as uuidv4 } from "uuid";
 
+const datastore = new Datastore();
+
 export const getQuestionsService = async () => {
-  let res = null;
+  const query = datastore.createQuery("question");
 
   try {
-    res = await db.select().from(questions);
+    const [questions] = await datastore.runQuery(query);
+
+    return questions;
   } catch (error) {
     console.log(error);
-    return res;
+    return null;
   }
-
-  return res;
 };
 
 export const createQuestionService = async (request: PostQuestionRequest) => {
   const { title, content, user_id } = request;
 
-  let question = null;
+  const question_id = uuidv4();
+
+  const key = datastore.key(["question", question_id]);
+
+  const question = {
+    key,
+    data: {
+      title,
+      content,
+      user_id,
+      question_id,
+      createdAt: new Date(),
+    },
+  };
 
   try {
-    question = db
-      .insert(questions)
-      .values({
-        title,
-        content,
-        user_id,
-        question_id: uuidv4(),
-        createdAt: new Date(),
-      })
-      .returning();
+    await datastore.save(question);
+    return question.data;
   } catch (error) {
     console.log(error);
+    return null;
   }
-
-  return question;
 };
