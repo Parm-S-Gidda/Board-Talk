@@ -25,18 +25,8 @@ class Board extends React.Component {
       console.log("WebSocket connection established.");
     };
 
-<<<<<<< HEAD
-        this.socket = new WebSocket(
-            "wss://" +
-              "whiteboard-service-nf23qxdm2q-uc.a.run.app" +
-              "/ws/whiteboard/" +
-              1 +
-              "/"
-          );
-=======
     this.socket.addEventListener("message", function (event) {
       console.log("got message");
->>>>>>> main
 
       console.log(event.data);
 
