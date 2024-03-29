@@ -114,7 +114,7 @@ function Question() {
         content: postAnswer,
       })
       .then((resp) => {
-        const answer: AnswerProcessed = resp.data[0];
+        const answer: AnswerProcessed = resp.data;
 
         if (answers) {
           setAnswers([

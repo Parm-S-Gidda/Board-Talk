@@ -6,44 +6,49 @@ import {
 } from "../middlewares/validator.requests";
 import { answers } from "../schema/schema";
 import { v4 as uuidv4 } from "uuid";
+import { Datastore, PropertyFilter } from "@google-cloud/datastore";
+
+const datastore = new Datastore();
 
 export const getAnswersService = async (request: GetAnswerRequest) => {
   const { question_id } = request;
 
-  let res = null;
+  const query = datastore
+    .createQuery("answer")
+    .filter(new PropertyFilter("question_id", "=", question_id));
 
   try {
-    res = await db
-      .select()
-      .from(answers)
-      .where(eq(answers.question_id, question_id));
+    const [answers] = await datastore.runQuery(query);
+    return answers;
   } catch (error) {
     console.log(error);
-    return res;
+    return null;
   }
-
-  return res;
 };
 
 export const createAnswerService = async (request: PostAnswerRequest) => {
   const { user_id, question_id, content } = request;
 
-  let answer = null;
+  const answer_id = uuidv4();
+
+  const key = datastore.key(["answer", answer_id]);
+
+  const answer = {
+    key,
+    data: {
+      answer_id,
+      author_id: user_id,
+      content,
+      question_id,
+      createdAt: new Date(),
+    },
+  };
 
   try {
-    answer = await db
-      .insert(answers)
-      .values({
-        answer_id: uuidv4(),
-        author_id: user_id,
-        content,
-        question_id,
-        createdAt: new Date(),
-      })
-      .returning();
+    await datastore.save(answer);
+    return answer.data;
   } catch (error) {
     console.log(error);
+    return null;
   }
-
-  return answer;
 };
