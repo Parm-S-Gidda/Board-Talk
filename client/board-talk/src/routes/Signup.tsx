@@ -26,13 +26,13 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const resp: AxiosResponse<User[]> = await axios.post(
+      const resp: AxiosResponse<User> = await axios.post(
         SIGN_UP_END_POINT,
         form
       );
 
       console.log("signup:", resp.data);
-      updateUser(resp.data[0]);
+      updateUser(resp.data);
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
