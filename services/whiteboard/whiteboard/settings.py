@@ -25,11 +25,7 @@ SECRET_KEY = "django-insecure-@6*q0f-+8*ug__l1lphi$4(3*ny(&gpq&fs38bvbvoyd!9y+9#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
-ALLOWED_HOSTS = ["whiteboard-service-2pmnanshaq-uw.a.run.app", "127.0.0.1", "iteration1-aff24.web.app"]
-=======
-ALLOWED_HOSTS = ["whiteboard-service-nf23qxdm2q-uc.a.run.app", "127.0.0.1", "cmpt-474-group-project.web.app", "project-1-a4318.web.app", "cmpt474-project-76635.web.app", "deploy-5aa53.web.app", "is4test-417122.web.app"]
->>>>>>> origin/ikenna-deploy
+ALLOWED_HOSTS = ["whiteboard-service-2pmnanshaq-uw.a.run.app", "127.0.0.1", "cmpt474-project-76635.web.app"]
 
 
 # Application definition
