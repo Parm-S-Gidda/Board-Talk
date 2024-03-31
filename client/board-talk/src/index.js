@@ -9,33 +9,41 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import SignUp from './routes/Signup';
+import Login from './routes/Login';
 import Dashboard from './routes/Dashboard';
 import { UserProvider } from "./context/userContext"
 import Question from "./routes/Question"
-import QuestionCreate from "./routes/Question-Create"
 import Container from './routes/container/Container';
+import Root from "./routes/Root"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SignUp />,
+    element: <Root />,
+    children: [
+      {
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/login",
+        element: <Login />
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />
+      },
+      {
+        path: "/question",
+        element: <Question />
+      },
+      {
+        path: "/whiteboard",
+        element: <Container />
+      }
+    ]
   },
-  {
-    path: "/dashboard",
-    element: <Dashboard />
-  },
-  {
-    path: "/question",
-    element: <Question />
-  },
-  {
-    path: "/question-create",
-    element: <QuestionCreate />
-  },
-  {
-    path: "/whiteboard",
-    element: <Container />
-  }
+
   ,
 ]);
 
