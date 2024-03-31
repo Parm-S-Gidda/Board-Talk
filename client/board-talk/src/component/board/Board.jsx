@@ -15,7 +15,7 @@ class Board extends React.Component {
 
     this.socket = new WebSocket(
       "wss://" +
-        "whiteboard-service-nf23qxdm2q-uc.a.run.app" +
+        "whiteboard-service-hhczgqx2ua-uw.a.run.app" +
         "/ws/whiteboard/" +
         1 +
         "/"
