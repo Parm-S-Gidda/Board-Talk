@@ -5,11 +5,7 @@ name: Deploy to Firebase Hosting on merge
 'on':
   push:
     branches:
-<<<<<<< HEAD
       - Matthew-Deploy3
-=======
-      - ikenna-deploy
->>>>>>> main
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -19,12 +15,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-<<<<<<< HEAD
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROJECT_1_A4318 }}'
           channelId: live
           projectId: project-1-a4318
-=======
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CMPT_474_GROUP_PROJECT }}'
-          channelId: live
-          projectId: cmpt-474-group-project
->>>>>>> main
