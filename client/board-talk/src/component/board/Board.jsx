@@ -1,5 +1,4 @@
 import React from "react";
-import io from "socket.io-client";
 
 import "./style.css";
 
@@ -23,6 +22,16 @@ class Board extends React.Component {
 
     this.socket.onopen = () => {
       console.log("WebSocket connection established.");
+    };
+
+
+    this.socket.onclose = (event) => {
+      console.log("WebSocket connection disconnected. Trying to reconnect");
+
+      //client will try to reconnect to server every 3 seconds of being disconnected while still on page
+      setTimeout(() => {
+        this.connectWebSocket();
+      }, 3000); 
     };
 
     this.socket.addEventListener("message", function (event) {
