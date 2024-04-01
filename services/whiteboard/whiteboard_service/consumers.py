@@ -5,16 +5,20 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class WhiteBoardConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.room_group_name = "chat_%s" % self.room_name
+        try:
+            self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+            self.room_group_name = "chat_%s" % self.room_name
 
 
-        # Join room group
-        await self.channel_layer.group_add(
-            self.room_group_name, self.channel_name
-        )
+            # Join room group
+            await self.channel_layer.group_add(
+                self.room_group_name, self.channel_name
+            )
 
-        await self.accept()
+            await self.accept()
+        except Exception as e:
+            await self.close(code=1011)  # Close the connection with a custom close code
+            print(f"Connection failed: {e}")
 
     async def disconnect(self, close_code):
         # Leave room group
