@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { QuestionsProcessed } from "../routes/Dashboard";
+import { CiHeart } from "react-icons/ci";
+import { GoComment } from "react-icons/go";
+import { timeElapsed } from "../utils/date";
 
 type QuestionCard = {
   question: QuestionsProcessed;
@@ -7,24 +10,37 @@ type QuestionCard = {
 
 function QuestionCard({ question }: QuestionCard) {
   const navigate = useNavigate();
-  const onCardClick = () => {
+  const onComment = () => {
     navigate("/question", {
       state: question,
     });
   };
   return (
-    <div
-      className="w-64 h-64 flex flex-col rounded-2xl shadow-lg gap-y-8 bg-gray-200 hover:cursor-pointer"
-      onClick={onCardClick}
-    >
-      <div className="flex flex-row gap-x-4 mt-7 justify-center">
-        <span className="font-normal">
-          {question.title} by {question.user.name}
-        </span>
+
+    <div className="flex flex-row w-full gap-x-2 bg-white rounded-2xl shadow-sm py-2 px-4">
+      <div className="flex flex-col items-center">
+        <img
+          src="/sample.jpg"
+          className="w-8 h-8 max-w-8 max-h-8 object-cover rounded-full mt-1"
+        />
       </div>
-      <span className="font-normal p-3 text-ellipsis overflow-hidden">
-        {question.content}
-      </span>
+      <div className="flex flex-col gap-y-2">
+        <div className="flex flex-row">
+          <span className="font-bold">{question.user.name}</span>
+          <span className="text-sm mt-0.5">
+            , {timeElapsed(new Date(question.createdAt), new Date())}
+          </span>
+        </div>
+        <span>{question.content}</span>
+        <div className="flex flex-row justify-between w-24 mt-5">
+          <CiHeart size={30} />
+          <GoComment
+            size={25}
+            className="mt-0.5 hover:cursor-pointer"
+            onClick={onComment}
+          />
+        </div>
+      </div>
     </div>
   );
 }
