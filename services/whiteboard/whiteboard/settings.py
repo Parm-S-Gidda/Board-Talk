@@ -130,8 +130,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("usw1-clever-humpback-34261.upstash.io", 34261)],
-            "password": "b9bfb085d74a41539acacc96af99e083"
+            "hosts": ["redis-cli -u redis://default:b9bfb085d74a41539acacc96af99e083@usw1-clever-humpback-34261.upstash.io:34261"],
         },
     },
 }
