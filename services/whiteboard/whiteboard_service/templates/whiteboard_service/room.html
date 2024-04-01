@@ -14,8 +14,8 @@
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'wss://'
-            + "whiteboard-service-2pmnanshaq-uw.a.run.app"
+            'ws://'
+            + window.location.host
             + '/ws/whiteboard/'
             + roomName
             + '/'
