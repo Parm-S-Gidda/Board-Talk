@@ -9,15 +9,6 @@ schemes:
 produces:
   - application/json
 
-securityDefinitions:
-  firebase:
-    authorizationUrl: ""
-    flow: "implicit"
-    type: "oauth2"
-    x-google-issuer: "https://securetoken.google.com/cmpt-474-group-project"
-    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-    x-google-audiences: "cmpt-474-group-project"
-
 paths:
   /users/signup:
     post:
@@ -168,3 +159,12 @@ paths:
       security:
         - firebase: []
     x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
+
+securityDefinitions:
+  firebase:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://securetoken.google.com/cmpt-474-group-project"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "cmpt-474-group-project"
