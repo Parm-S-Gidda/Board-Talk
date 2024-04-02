@@ -10,7 +10,7 @@ produces:
   - application/json
 
 paths:
-  /users/signup:
+  /api/users/signup:
     post:
       summary: register user
       operationId: signup
@@ -33,7 +33,7 @@ paths:
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app
 
-  /users/login:
+  /api/users/login:
     post:
       summary: login user
       operationId: login
@@ -55,7 +55,7 @@ paths:
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app
 
-  /users/logout:
+  /api/users/logout:
     post:
       summary: logout user
       operationId: logout
@@ -71,7 +71,7 @@ paths:
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app
 
-  /users:
+  /api/users:
     get:
       summary: get user
       operationId: get user
@@ -92,7 +92,7 @@ paths:
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app
 
-  /questions:
+  /api/questions:
     get:
       summary: get all questions
       operationId: get questions
@@ -133,7 +133,7 @@ paths:
       x-google-backend:
         address: https://question-service-nf23qxdm2q-uc.a.run.app
 
-  /answers:
+  /api/answers:
     get:
       summary: get all answers to a question
       operationId: get answers
