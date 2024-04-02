@@ -1,5 +1,4 @@
 import { Datastore } from "@google-cloud/datastore";
-import db from "../configs/db.config";
 import { PostQuestionRequest } from "../middlewares/validator.requests";
 import { questions } from "../schema/schema";
 import { v4 as uuidv4 } from "uuid";
