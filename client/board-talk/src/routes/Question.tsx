@@ -32,18 +32,26 @@ export type AnswerProcessed = {
   author: User;
   createdAt: string;
 };
+
+const MAX_RETRIES = 5;
+
 function Question() {
   const location: Location<QuestionsProcessed> = useLocation();
 
   const [answers, setAnswers] = useState<AnswerProcessed[] | null>(null);
 
   useEffect(() => {
+    let currentRetry = 0;
+    let success = false;
     //console.log("location:", location.state);
-    axios
+
+    while (currentRetry < MAX_RETRIES && !success) {
+      axios
       .get(GET_ANSWERS, {
         params: {
           question_id: location.state.question_id,
         },
+        timeout: 1000
       })
       .then(async (resp: AxiosResponse<Answer[]>) => {
         const getUser = async (
@@ -55,6 +63,8 @@ function Question() {
             },
           });
         };
+
+        success = true;
 
         const answers = resp.data;
 
@@ -99,8 +109,11 @@ function Question() {
         setAnswers(answerProcessed);
       })
       .catch((error: any) => {
+        currentRetry++;
         console.log(error);
       });
+    }
+
   }, []);
 
   const [postAnswer, setPostAnswer] = useState<string>("");
@@ -108,43 +121,53 @@ function Question() {
   const { user, updateUser } = useUser();
 
   const onPost = () => {
-    axios
-      .post(POST_ANSWER, {
-        user_id: user.user_id,
-        question_id: location.state.question_id,
-        content: postAnswer,
-      })
-      .then((resp) => {
-        const answer: AnswerProcessed = resp.data;
+    let currentRetry = 0;
+    let success = false;
 
-        if (answers) {
-          setAnswers([
-            ...answers,
-            {
-              answer_id: answer.answer_id,
-              content: answer.content,
-              question_id: answer.question_id,
-              author: user,
-              createdAt: answer.createdAt,
-            },
-          ]);
-        } else {
-          setAnswers([
-            {
-              answer_id: answer.answer_id,
-              content: answer.content,
-              question_id: answer.question_id,
-              author: user,
-              createdAt: answer.createdAt,
-            },
-          ]);
-        }
+    while (currentRetry < MAX_RETRIES && !success) {
 
-        setPostAnswer("");
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+      axios
+        .post(POST_ANSWER, {
+          user_id: user.user_id,
+          question_id: location.state.question_id,
+          content: postAnswer,
+        }, {
+          timeout: 1000,
+        })
+        .then((resp) => {
+          success = true;
+          const answer: AnswerProcessed = resp.data;
+
+          if (answers) {
+            setAnswers([
+              ...answers,
+              {
+                answer_id: answer.answer_id,
+                content: answer.content,
+                question_id: answer.question_id,
+                author: user,
+                createdAt: answer.createdAt,
+              },
+            ]);
+          } else {
+            setAnswers([
+              {
+                answer_id: answer.answer_id,
+                content: answer.content,
+                question_id: answer.question_id,
+                author: user,
+                createdAt: answer.createdAt,
+              },
+            ]);
+          }
+
+          setPostAnswer("");
+        })
+        .catch((error: any) => {
+          currentRetry++;
+          console.log(error);
+        });
+      }
   };
   return (
     // <div className="w-screen h-screen flex flex-col justify-start items-center gap-y-14">
