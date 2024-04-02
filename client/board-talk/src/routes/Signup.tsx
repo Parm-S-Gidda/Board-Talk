@@ -20,22 +20,43 @@ function SignUp() {
 
   const { user, updateUser } = useUser();
 
+
   const navigate = useNavigate();
 
   const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const resp: AxiosResponse<User> = await axios.post(
-        SIGN_UP_END_POINT,
-        form
-      );
+    let retryAttempt = 0;
 
-      console.log("signup:", resp.data);
-      updateUser(resp.data);
-      navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
+    while(true){
+
+      try {
+        const resp: AxiosResponse<User> = await axios.post(
+          SIGN_UP_END_POINT,
+          form, 
+          {timeout: 10000} //tiemout after 10 seconds 
+        );
+
+        console.log("signup:", resp.data);
+        updateUser(resp.data);
+        navigate("/dashboard");
+
+      } catch (error) {
+
+        if(retryAttempt < 5){
+          console.log("Sign up Error. Retrying.")
+          retryAttempt++;
+          continue; 
+        }
+        else{
+          
+          alert("Sorry, we ran into an error Signing you up. Please try again later");
+          break;
+        }
+          
+       
+      
+      }
     }
   };
 

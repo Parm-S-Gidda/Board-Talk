@@ -49,7 +49,10 @@ class Board extends React.Component {
         }, 3000); 
       }
       else{
-        alert("Your session has ended due to inactivity. Please refresh the page to continue.");
+       
+
+        if(alert("You have been disconnected due to inactivity. Press OK to reconnect.")){}
+        else    window.location.reload();   
       }
     };
 
