@@ -30,7 +30,7 @@ paths:
           description: A successful sign up
           schema:
             type: object
-    x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
+      x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
 
   /users/login:
     post:
@@ -51,7 +51,7 @@ paths:
           description: A successful login
           schema:
             type: object
-    x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
+      x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
 
   /users/logout:
     post:
@@ -66,7 +66,7 @@ paths:
 
       security:
         - firebase: []
-    x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
+      x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
 
   /users:
     get:
@@ -86,7 +86,7 @@ paths:
 
       security:
         - firebase: []
-    x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
+      x-google-backend: https://user-service-nf23qxdm2q-uc.a.run.app
 
   /questions:
     get:
@@ -100,6 +100,7 @@ paths:
             type: object
       security:
         - firebase: []
+      x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
 
     post:
       summary: Create a question
@@ -124,7 +125,7 @@ paths:
       security:
         - firebase: []
 
-    x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
+      x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
 
   /answers:
     get:
@@ -143,6 +144,7 @@ paths:
             type: object
       security:
         - firebase: []
+      x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
 
     post:
       summary: Create an answer
@@ -166,7 +168,7 @@ paths:
             type: object
       security:
         - firebase: []
-    x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
+      x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
 
 securityDefinitions:
   firebase:
