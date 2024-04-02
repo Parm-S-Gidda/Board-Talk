@@ -31,7 +31,7 @@ paths:
           schema:
             type: object
       x-google-backend:
-        address: https://user-service-nf23qxdm2q-uc.a.run.app
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/signup
 
   /api/users/login:
     post:
@@ -53,7 +53,7 @@ paths:
           schema:
             type: object
       x-google-backend:
-        address: https://user-service-nf23qxdm2q-uc.a.run.app
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/login
 
   /api/users/logout:
     post:
@@ -69,7 +69,7 @@ paths:
       security:
         - firebase: []
       x-google-backend:
-        address: https://user-service-nf23qxdm2q-uc.a.run.app
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/logout
 
   /api/users:
     get:
@@ -90,7 +90,7 @@ paths:
       security:
         - firebase: []
       x-google-backend:
-        address: https://user-service-nf23qxdm2q-uc.a.run.app
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users
 
   /api/questions:
     get:
@@ -105,7 +105,7 @@ paths:
       security:
         - firebase: []
       x-google-backend:
-        address: https://question-service-nf23qxdm2q-uc.a.run.app
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions
 
     post:
       summary: Create a question
@@ -131,7 +131,7 @@ paths:
         - firebase: []
 
       x-google-backend:
-        address: https://question-service-nf23qxdm2q-uc.a.run.app
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions
 
   /api/answers:
     get:
@@ -151,7 +151,7 @@ paths:
       security:
         - firebase: []
       x-google-backend:
-        address: https://question-service-nf23qxdm2q-uc.a.run.app
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/answers
 
     post:
       summary: Create an answer
@@ -176,7 +176,7 @@ paths:
       security:
         - firebase: []
       x-google-backend:
-        address: https://question-service-nf23qxdm2q-uc.a.run.app
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/answers
 
 securityDefinitions:
   firebase:
