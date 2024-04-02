@@ -26,25 +26,29 @@ function SignUp() {
   const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let retryAttempt = 0;
+    let retryAttempt = 1;
 
     while(true){
 
       try {
+
+        console.log("Trying Signup");
         const resp: AxiosResponse<User> = await axios.post(
           SIGN_UP_END_POINT,
           form, 
           {timeout: 10000} //tiemout after 10 seconds 
         );
 
-        console.log("signup:", resp.data);
+        console.log("successful signup:", resp.data);
         updateUser(resp.data);
         navigate("/dashboard");
+        break;
 
       } catch (error) {
 
-        if(retryAttempt < 5){
-          console.log("Sign up Error. Retrying.")
+        console.log("error: " + error);
+        if(retryAttempt < 6){
+          console.log("Sign up Error. Retrying. Attempt: " + retryAttempt + "/5");
           retryAttempt++;
           continue; 
         }
