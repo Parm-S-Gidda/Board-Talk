@@ -1,9 +1,5 @@
 import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import { SIGN_UP_END_POINT } from "../utils/endpoints";
-import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
-import { User } from "./Dashboard";
 
 type FormType = {
   name: string;
@@ -11,63 +7,26 @@ type FormType = {
   password: string;
 };
 
-function SignUp() {
+export default function Login() {
   const [form, setForm] = useState<FormType>({
     email: "",
     name: "",
     password: "",
   });
 
-  const { user, updateUser } = useUser();
-
   const navigate = useNavigate();
 
-  const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const resp: AxiosResponse<User> = await axios.post(
-        SIGN_UP_END_POINT,
-        form
-      );
-
-      console.log("signup:", resp.data);
-      updateUser(resp.data);
-      navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onLogin = () => {
-    navigate("/login");
+  const onSignUp = () => {
+    navigate("/signup");
   };
   return (
     <form
       className="h-full w-full flex flex-row justify-center items-center"
-      onSubmit={onSignUp}
+      // onSubmit={onSignUp}
     >
       <div className="flex flex-col gap-y-3 bg-white shadow-2xl px-14 py-7 rounded-xl">
-        <span className="text-center text-3xl">Sign up</span>
+        <span className="text-center text-3xl">Log in</span>
         <div className="relative flex mt-10">
-          <input
-            type="text"
-            name="name"
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            value={form.name}
-            className="w-72 h-11 border-2 focus:border-blue-green border-gray-300 outline-none rounded-lg px-3 peer"
-          ></input>
-
-          <span
-            className={`absolute left-3 text-sm text-gray-500 peer-focus:-top-2 peer-focus:transition-all bg-white peer-focus:text-xs ${
-              form.name.length == 0 ? "top-2.5 " : "-top-2 text-xs"
-            }`}
-          >
-            Name
-          </span>
-        </div>
-
-        <div className="relative flex">
           <input
             type="text"
             name="email"
@@ -101,22 +60,18 @@ function SignUp() {
         </div>
 
         <button className="w-72 h-12 rounded-lg mt-5 bg-mineral-green">
-          <span className="text-white text-nor">Sign up</span>
+          <span className="text-white text-nor">Log in</span>
         </button>
         <div className="w-72 flex flex-row justify-center">
-          <span className="text-gray-500 text-sm">
-            Already have an account?
-          </span>
+          <span className="text-gray-500 text-sm">Don't have an account?</span>
           <span
             className="ml-1 text-sm text-gulf-stream font-semibold hover:cursor-pointer hover:underline"
-            onClick={onLogin}
+            onClick={onSignUp}
           >
-            Log in
+            Sign up
           </span>
         </div>
       </div>
     </form>
   );
 }
-
-export default SignUp;
