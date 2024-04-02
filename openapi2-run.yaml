@@ -20,7 +20,10 @@ paths:
           description: The user
           schema:
             type: object
-            required: true
+            required:
+              - name
+              - email
+              - password
 
       responses:
         "200":
@@ -39,7 +42,9 @@ paths:
           description: The user
           schema:
             type: object
-            required: true
+            required:
+              - email
+              - password
 
       responses:
         "200":
@@ -71,9 +76,7 @@ paths:
         - in: query
           name: user_id
           description: user's id
-          schema:
-            type: string
-            required: true
+          type: string
 
       responses:
         "200":
@@ -94,7 +97,7 @@ paths:
         "200":
           description: A successful get all questions request
           schema:
-            type: array
+            type: object
       security:
         - firebase: []
 
@@ -107,13 +110,16 @@ paths:
           description: The question
           schema:
             type: object
-            required: true
+            required:
+              - user_id
+              - content
+              - title
 
       responses:
         "200":
           description: A successful create a question request
           schema:
-            type: array
+            type: object
 
       security:
         - firebase: []
@@ -128,15 +134,13 @@ paths:
         - in: query
           name: question_id
           description: question id
-          schema:
-            type: string
-            required: true
+          type: string
 
       responses:
         "200":
           description: A successful get all answers to a question
           schema:
-            type: array
+            type: object
       security:
         - firebase: []
 
@@ -149,13 +153,17 @@ paths:
           description: The answer
           schema:
             type: object
-            required: true
+            required:
+              - user_id
+              - question_id
+              - content
+              - title
 
       responses:
         "200":
           description: A successful creation of an answer request
           schema:
-            type: array
+            type: object
       security:
         - firebase: []
     x-google-backend: https://question-service-nf23qxdm2q-uc.a.run.app
