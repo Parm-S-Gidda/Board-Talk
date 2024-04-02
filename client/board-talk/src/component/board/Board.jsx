@@ -18,7 +18,7 @@ class Board extends React.Component {
 
     this.socket = new WebSocket(
       "wss://" +
-        "whiteboard-service-nf23qxdm2q-uc.a.run.app" +
+        "whiteboard-service-ljofwenvaq-uw.a.run.app" +
         "/ws/whiteboard/" +
         1 +
         "/"
@@ -88,7 +88,6 @@ class Board extends React.Component {
     this.timeoutUser = setTimeout(() => {
       this.userTimeOut();
     }, 120000);
-
   }
 
   userTimeOut(){
