@@ -39,7 +39,13 @@ class Board extends React.Component {
       if(!(this.timeoutClose)){
         //client will try to reconnect to server every 3 seconds of being disconnected while still on page
         setTimeout(() => {
-          this.connectWebSocket();
+          this.socket = new WebSocket(
+            "wss://" +
+              "whiteboard-service-ljofwenvaq-uw.a.run.app" +
+              "/ws/whiteboard/" +
+              1 +
+              "/"
+          );
         }, 3000); 
       }
       else{
