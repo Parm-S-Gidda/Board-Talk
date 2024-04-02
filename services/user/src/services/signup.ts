@@ -3,15 +3,15 @@ import db from "../configs/db.config";
 import { SignupRequest } from "../middlewares/validator.signup";
 import { users } from "../schema/schema";
 import { v4 as uuidv4 } from "uuid";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../firebase";
 
-export const signUp = async (signUpRequest: SignupRequest) => {
+export const signUp = async (signUpRequest: SignupRequest, user_id: string) => {
   const datastore = new Datastore();
-
-  const user_id = uuidv4();
 
   const key = datastore.key(["user", user_id]);
 
-  const { name, email } = signUpRequest.body;
+  const { name, email, password } = signUpRequest.body;
 
   const user = {
     key,
@@ -31,23 +31,21 @@ export const signUp = async (signUpRequest: SignupRequest) => {
     console.log(error);
     return null;
   }
+};
 
-  //console.log("Signing up users ....");
-  // let user = null;
+export const firebaseAuth = async (signUpRequest: SignupRequest) => {
+  const { email, password } = signUpRequest.body;
 
-  // try {
-  //   user = await db
-  //     .insert(users)
-  //     .values({
-  //       name,
-  //       email,
-  //       user_id: uuidv4(),
-  //       createdAt: new Date(),
-  //     })
-  //     .returning();
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-  // return user;
+    return userCredential.user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
