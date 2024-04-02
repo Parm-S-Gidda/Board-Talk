@@ -1,0 +1,188 @@
+swagger: "2.0"
+info:
+  title: CMPT-474-Group-Project
+  description: This is the API config for API Gateway with Cloud Run services
+  version: 1.0.0
+
+schemes:
+  - https
+produces:
+  - application/json
+
+paths:
+  /users/signup:
+    post:
+      summary: register user
+      operationId: signup
+      parameters:
+        - in: body
+          name: user
+          description: The user
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - password
+
+      responses:
+        "200":
+          description: A successful sign up
+          schema:
+            type: object
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app
+
+  /users/login:
+    post:
+      summary: login user
+      operationId: login
+      parameters:
+        - in: body
+          name: user
+          description: The user
+          schema:
+            type: object
+            required:
+              - email
+              - password
+
+      responses:
+        "200":
+          description: A successful login
+          schema:
+            type: object
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app
+
+  /users/logout:
+    post:
+      summary: logout user
+      operationId: logout
+
+      responses:
+        "200":
+          description: A successful login
+          schema:
+            type: object
+
+      security:
+        - firebase: []
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app
+
+  /users:
+    get:
+      summary: get user
+      operationId: get user
+      parameters:
+        - in: query
+          name: user_id
+          description: user's id
+          type: string
+
+      responses:
+        "200":
+          description: A successful get user request
+          schema:
+            type: object
+
+      security:
+        - firebase: []
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app
+
+  /questions:
+    get:
+      summary: get all questions
+      operationId: get questions
+
+      responses:
+        "200":
+          description: A successful get all questions request
+          schema:
+            type: object
+      security:
+        - firebase: []
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app
+
+    post:
+      summary: Create a question
+      operationId: post question
+      parameters:
+        - in: body
+          name: question
+          description: The question
+          schema:
+            type: object
+            required:
+              - user_id
+              - content
+              - title
+
+      responses:
+        "200":
+          description: A successful create a question request
+          schema:
+            type: object
+
+      security:
+        - firebase: []
+
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app
+
+  /answers:
+    get:
+      summary: get all answers to a question
+      operationId: get answers
+      parameters:
+        - in: query
+          name: question_id
+          description: question id
+          type: string
+
+      responses:
+        "200":
+          description: A successful get all answers to a question
+          schema:
+            type: object
+      security:
+        - firebase: []
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app
+
+    post:
+      summary: Create an answer
+      operationId: Create an answer to a question
+      parameters:
+        - in: body
+          name: answer
+          description: The answer
+          schema:
+            type: object
+            required:
+              - user_id
+              - question_id
+              - content
+              - title
+
+      responses:
+        "200":
+          description: A successful creation of an answer request
+          schema:
+            type: object
+      security:
+        - firebase: []
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app
+
+securityDefinitions:
+  firebase:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://securetoken.google.com/cmpt-474-group-project"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "cmpt-474-group-project"

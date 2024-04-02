@@ -164,11 +164,11 @@ function Dashboard() {
     // </div>
 
     <div className="h-full w-full flex flex-col">
-      <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 overflow-y-auto">
+      <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 max-h-9/10 overflow-y-auto">
         {questions &&
           questions.map((question) => <QuestionCard question={question} />)}
       </div>
-      <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center">
+      <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center shadow-md">
         <input
           placeholder="Question"
           className="bg-gray-200 px-3 h-full w-11/12 rounded-2xl outline-none"
