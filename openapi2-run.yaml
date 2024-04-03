@@ -23,6 +23,13 @@ paths:
       responses:
         "200":
           description: A successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
     post:
       summary: register user
       operationId: signup
@@ -54,6 +61,13 @@ paths:
       responses:
         "200":
           description: A successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
     post:
       summary: login user
       operationId: login
@@ -84,6 +98,13 @@ paths:
       responses:
         "200":
           description: A successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
     post:
       summary: logout user
       operationId: logout
@@ -108,6 +129,13 @@ paths:
       responses:
         "200":
           description: A successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
     get:
       summary: get user
       operationId: get user
@@ -137,6 +165,13 @@ paths:
       responses:
         "200":
           description: A successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
     get:
       summary: get all questions
       operationId: get questions
@@ -186,6 +221,13 @@ paths:
       responses:
         "200":
           description: A successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
 
     get:
       summary: get all answers to a question
