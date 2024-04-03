@@ -10,7 +10,7 @@ produces:
   - application/json
 
 x-google-endpoints:
-  - name: "gateway-v1-7arsorel.uc.gateway.dev"
+  - name: "user-service-nf23qxdm2q-uc.a.run.app"
     allowCors: True
 
 paths:
