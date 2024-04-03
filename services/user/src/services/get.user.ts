@@ -1,7 +1,9 @@
 import { Datastore, PropertyFilter } from "@google-cloud/datastore";
 
 export const getUser = async (user_id: string) => {
-  const datastore = new Datastore();
+  const datastore = new Datastore({
+    databaseId: "multi-region",
+  });
 
   const query = datastore
     .createQuery("user")

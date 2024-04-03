@@ -4,7 +4,9 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase";
 
 export const signUp = async (signUpRequest: SignupRequest, user_id: string) => {
-  const datastore = new Datastore();
+  const datastore = new Datastore({
+    databaseId: "multi-region",
+  });
 
   const key = datastore.key(["user", user_id]);
 

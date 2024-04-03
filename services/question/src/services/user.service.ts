@@ -2,7 +2,9 @@ import { Datastore } from "@google-cloud/datastore";
 import { PostQuestionRequest } from "../middlewares/validator.requests";
 import { v4 as uuidv4 } from "uuid";
 
-const datastore = new Datastore();
+const datastore = new Datastore({
+  databaseId: "multi-region",
+});
 
 export const getQuestionsService = async () => {
   const query = datastore.createQuery("question");

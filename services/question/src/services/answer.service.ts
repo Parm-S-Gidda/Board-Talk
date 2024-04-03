@@ -5,7 +5,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { Datastore, PropertyFilter } from "@google-cloud/datastore";
 
-const datastore = new Datastore();
+const datastore = new Datastore({
+  databaseId: "multi-region",
+});
 
 export const getAnswersService = async (request: GetAnswerRequest) => {
   const { question_id } = request;
