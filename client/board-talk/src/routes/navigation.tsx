@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Outlet, useNavigate } from "react-router-dom";
 import { LOGOUT } from "../utils/endpoints";
+import Cookies from "js-cookie";
 
 type Message = {
   message: string;
@@ -10,7 +11,13 @@ export default function Navigation() {
   const navigate = useNavigate();
   const onLogout = async () => {
     try {
-      const response: AxiosResponse<Message> = await axios.post(LOGOUT);
+      const response: AxiosResponse<Message> = await axios.post(
+        LOGOUT,
+        {},
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+        }
+      );
 
       console.log(response.data.message);
 

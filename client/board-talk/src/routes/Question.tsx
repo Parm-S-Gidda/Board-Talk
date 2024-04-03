@@ -16,6 +16,7 @@ import { useUser } from "../hooks/user";
 import QuestionCard from "../component/QuestionCard";
 import AnswerCard from "../component/AnswerCard";
 import { RiSendPlane2Fill } from "react-icons/ri";
+import Cookies from "js-cookie";
 
 type Answer = {
   answer_id: string;
@@ -44,6 +45,7 @@ function Question() {
         params: {
           question_id: location.state.question_id,
         },
+        headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
       })
       .then(async (resp: AxiosResponse<Answer[]>) => {
         const getUser = async (
@@ -53,6 +55,7 @@ function Question() {
             params: {
               user_id,
             },
+            headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
           });
         };
 
@@ -108,12 +111,17 @@ function Question() {
   const { user, updateUser } = useUser();
 
   const onPost = () => {
+    console.log("accesToken:", Cookies.get("accessToken"));
     axios
-      .post(POST_ANSWER, {
-        user_id: user.user_id,
-        question_id: location.state.question_id,
-        content: postAnswer,
-      })
+      .post(
+        POST_ANSWER,
+        {
+          user_id: user.user_id,
+          question_id: location.state.question_id,
+          content: postAnswer,
+        },
+        { headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` } }
+      )
       .then((resp) => {
         const answer: AnswerProcessed = resp.data;
 

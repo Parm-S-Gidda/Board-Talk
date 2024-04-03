@@ -9,6 +9,7 @@ import {
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { RiSendPlane2Fill } from "react-icons/ri";
+import Cookies from "js-cookie";
 
 type Questions = {
   question_id: string;
@@ -36,7 +37,7 @@ export type QuestionsProcessed = {
 function Dashboard() {
   const { user, updateUser } = useUser();
 
-  console.log(user);
+  console.log("token:", Cookies.get("accessToken"));
   const [questions, setQuestions] = useState<QuestionsProcessed[]>([]);
   useEffect(() => {
     const getUser = async (user_id: string): Promise<AxiosResponse<User>> => {
@@ -44,11 +45,15 @@ function Dashboard() {
         params: {
           user_id,
         },
+        headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
       });
     };
     const getQuestions = async () => {
       const resp: AxiosResponse<Questions> = await axios.get(
-        GET_QUESTIONS_END_POINT
+        GET_QUESTIONS_END_POINT,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+        }
       );
 
       const questions = resp.data;
@@ -120,6 +125,9 @@ function Dashboard() {
           user_id: user.user_id,
           title: "",
           content: question,
+        },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
         }
       );
 

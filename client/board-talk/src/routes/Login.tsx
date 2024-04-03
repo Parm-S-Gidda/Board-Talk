@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LOGIN, LOGOUT } from "../utils/endpoints";
 import { User } from "./Dashboard";
 import { useUser } from "../hooks/user";
+import Cookies from "js-cookie";
 
 type FormType = {
   name: string;
@@ -35,7 +36,10 @@ export default function Login() {
 
     try {
       const resp: AxiosResponse<User> = await axios.post(LOGIN, form);
-      console.log("login user:", resp.data);
+      // console.log("login user:", resp.data);
+      // console.log("headers:", resp.headers);
+      // Cookies.set("acessToken", resp.headers["Set-Cookie"]);
+      console.log("cookies:", document.cookie);
       updateUser(resp.data);
       navigate("/home/dashboard");
     } catch (error) {

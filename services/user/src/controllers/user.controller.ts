@@ -27,7 +27,6 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   res.cookie("accessToken", await userFirebase.getIdToken(), {
-    httpOnly: true,
     secure: process.env.NODE_ENV == "production",
   });
 
@@ -72,7 +71,6 @@ export const login = async (req: Request, res: Response) => {
   }
 
   res.cookie("accessToken", await user.getIdToken(), {
-    httpOnly: true,
     secure: process.env.NODE_ENV == "production",
   });
 

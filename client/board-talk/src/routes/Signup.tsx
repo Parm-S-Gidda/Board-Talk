@@ -4,6 +4,7 @@ import { SIGN_UP_END_POINT } from "../utils/endpoints";
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { User } from "./Dashboard";
+import Cookies from "js-cookie";
 
 type FormType = {
   name: string;
@@ -33,6 +34,7 @@ function SignUp() {
 
       console.log("signup:", resp.data);
       updateUser(resp.data);
+      Cookies.set("acessToken", resp.headers["accessToken"]);
       navigate("/home/dashboard");
     } catch (error) {
       console.log(error);
