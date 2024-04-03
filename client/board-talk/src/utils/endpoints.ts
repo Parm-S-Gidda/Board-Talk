@@ -1,23 +1,17 @@
-// export const SIGN_UP_END_POINT =
-//   "https://user-service-nf23qxdm2q-uc.a.run.app/api/users/signup";
-// export const GET_QUESTIONS_END_POINT =
-//   "https://question-service-nf23qxdm2q-uc.a.run.app/api/questions";
-// export const GET_USER_ENDPOINT =
-//   "https://user-service-nf23qxdm2q-uc.a.run.app/api/users/";
-// export const GET_ANSWERS =
-//   "https://question-service-nf23qxdm2q-uc.a.run.app/api/answers";
-// export const POST_ANSWER =
-//   "https://question-service-nf23qxdm2q-uc.a.run.app/api/answers";
-// export const POST_GUESTION =
-//   "https://question-service-nf23qxdm2q-uc.a.run.app/api/questions";
-// export const LOGOUT = "https://user-service-nf23qxdm2q-uc.a.run.app/api/users/logout";
-// export const LOGIN = "https://user-service-nf23qxdm2q-uc.a.run.app/api/users/login";
+export const SIGN_UP_END_POINT = "http://34.111.184.26:443/api/users/signup";
+export const GET_QUESTIONS_END_POINT = "http://34.111.184.26:443/api/questions";
+export const GET_USER_ENDPOINT = "http://34.111.184.26:443/api/users/";
+export const GET_ANSWERS = "http://34.111.184.26:443/api/answers";
+export const POST_ANSWER = "http://34.111.184.26:443/api/answers";
+export const POST_GUESTION = "http://34.111.184.26:443/api/questions";
+export const LOGOUT = "http://34.111.184.26:443/api/users/logout";
+export const LOGIN = "http://34.111.184.26:443/api/users/login";
 
-export const SIGN_UP_END_POINT = "http://localhost:5000/api/users/signup";
-export const GET_QUESTIONS_END_POINT = "http://localhost:7000/api/questions";
-export const GET_USER_ENDPOINT = "http://localhost:5000/api/users/";
-export const GET_ANSWERS = "http://localhost:7000/api/answers";
-export const POST_ANSWER = "http://localhost:7000/api/answers";
-export const POST_GUESTION = "http://localhost:7000/api/questions";
-export const LOGOUT = "http://localhost:5000/api/users/logout";
-export const LOGIN = "http://localhost:5000/api/users/login";
+// export const SIGN_UP_END_POINT = "http://localhost:5000/api/users/signup";
+// export const GET_QUESTIONS_END_POINT = "http://localhost:7000/api/questions";
+// export const GET_USER_ENDPOINT = "http://localhost:5000/api/users/";
+// export const GET_ANSWERS = "http://localhost:7000/api/answers";
+// export const POST_ANSWER = "http://localhost:7000/api/answers";
+// export const POST_GUESTION = "http://localhost:7000/api/questions";
+// export const LOGOUT = "http://localhost:5000/api/users/logout";
+// export const LOGIN = "http://localhost:5000/api/users/login";

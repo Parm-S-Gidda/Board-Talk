@@ -1,7 +1,5 @@
 import { Datastore } from "@google-cloud/datastore";
 import { SignupRequest } from "../middlewares/validator.signup";
-import { users } from "../schema/schema";
-import { v4 as uuidv4 } from "uuid";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase";
 

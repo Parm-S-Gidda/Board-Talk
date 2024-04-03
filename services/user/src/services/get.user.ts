@@ -1,5 +1,3 @@
-import { eq } from "drizzle-orm";
-import { users } from "../schema/schema";
 import { Datastore, PropertyFilter } from "@google-cloud/datastore";
 
 export const getUser = async (user_id: string) => {

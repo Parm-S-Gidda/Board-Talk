@@ -9,6 +9,10 @@ schemes:
 produces:
   - application/json
 
+x-google-endpoints:
+  - name: "gateway-v1-7arsorel.uc.gateway.dev"
+    allowCors: True
+
 paths:
   /api/users/signup:
     post:
