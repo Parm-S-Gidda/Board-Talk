@@ -19,6 +19,8 @@ export default function Navigation() {
         }
       );
 
+      Cookies.remove("accessToken");
+
       console.log(response.data.message);
 
       navigate("/");
