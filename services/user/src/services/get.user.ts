@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import db from "../configs/db.config";
 import { users } from "../schema/schema";
 import { Datastore, PropertyFilter } from "@google-cloud/datastore";
 
