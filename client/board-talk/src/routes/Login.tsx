@@ -35,12 +35,17 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const resp: AxiosResponse<User> = await axios.post(LOGIN, form);
-      // console.log("login user:", resp.data);
-      // console.log("headers:", resp.headers);
-      // Cookies.set("acessToken", resp.headers["Set-Cookie"]);
-      console.log("cookies:", document.cookie);
-      updateUser(resp.data);
+      const resp: AxiosResponse<any> = await axios.post(LOGIN, form);
+
+      const userResponse: User = {
+        name: resp.data.name,
+        email: resp.data.email,
+        user_id: resp.data.user_id,
+        createdAt: resp.data.createdAt,
+      };
+
+      updateUser(userResponse);
+      Cookies.set("accessToken", resp.data.accessToken);
       navigate("/home/dashboard");
     } catch (error) {
       console.log(error);

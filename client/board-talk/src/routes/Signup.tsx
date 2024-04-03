@@ -27,14 +27,19 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const resp: AxiosResponse<User> = await axios.post(
+      const resp: AxiosResponse<any> = await axios.post(
         SIGN_UP_END_POINT,
         form
       );
 
-      console.log("signup:", resp.data);
-      updateUser(resp.data);
-      Cookies.set("acessToken", resp.headers["accessToken"]);
+      const userResponse: User = {
+        name: resp.data.name,
+        email: resp.data.email,
+        user_id: resp.data.user_id,
+        createdAt: resp.data.createdAt,
+      };
+      updateUser(userResponse);
+      Cookies.set("accessToken", resp.data.accessToken);
       navigate("/home/dashboard");
     } catch (error) {
       console.log(error);

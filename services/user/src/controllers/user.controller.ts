@@ -26,14 +26,17 @@ export const createUser = async (req: Request, res: Response) => {
     return;
   }
 
-  res.cookie("accessToken", await userFirebase.getIdToken(), {
-    secure: process.env.NODE_ENV == "production",
-  });
+  // res.cookie("accessToken", await userFirebase.getIdToken(), {
+  //   secure: process.env.NODE_ENV == "production",
+  //   httpOnly: false,
+  // });
 
   const user = await signUp(signUpRequest, userFirebase.uid);
 
   if (user) {
-    res.status(201).json(user);
+    const accessToken = await userFirebase.getIdToken();
+    const userResponse = { ...user, accessToken };
+    res.status(201).json(userResponse);
   } else {
     res.status(400).json({
       error: "Please check your arguments",
@@ -70,14 +73,17 @@ export const login = async (req: Request, res: Response) => {
     return;
   }
 
-  res.cookie("accessToken", await user.getIdToken(), {
-    secure: process.env.NODE_ENV == "production",
-  });
+  // res.cookie("accessToken", await user.getIdToken(), {
+  //   secure: process.env.NODE_ENV == "production",
+  //   httpOnly: false,
+  // });
 
   const userDb = await getUserService(user.uid);
 
   if (userDb) {
-    res.status(200).json(userDb);
+    const accessToken = await user.getIdToken();
+    const userResponse = { ...userDb, accessToken };
+    res.status(200).json(userResponse);
   } else {
     res.status(500).json({
       error: "Error with database",
