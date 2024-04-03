@@ -1,10 +1,15 @@
 import { useState } from "react";
 import axios, { AxiosResponse } from "axios";
-import { SIGN_UP_END_POINT } from "../utils/endpoints";
+import {
+  QUESTION_PING,
+  SIGN_UP_END_POINT,
+  USER_PING,
+} from "../utils/endpoints";
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { User } from "./Dashboard";
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 
 type FormType = {
   name: string;
@@ -13,6 +18,15 @@ type FormType = {
 };
 
 function SignUp() {
+  useEffect(() => {
+    const onPing = async () => {
+      const pings = [axios.get(QUESTION_PING), axios.get(USER_PING)];
+
+      await Promise.all(pings);
+    };
+
+    onPing();
+  }, []);
   const [form, setForm] = useState<FormType>({
     email: "",
     name: "",

@@ -236,6 +236,52 @@ paths:
       x-google-backend:
         address: https://question-service-nf23qxdm2q-uc.a.run.app/api/answers
 
+  /api/questions/ping:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello7
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions/ping
+      responses:
+        "200":
+          description: A successful response
+
+    get:
+      summary: ping question service
+      operationId: ping questions
+
+      responses:
+        "200":
+          description: A successful ping
+          schema:
+            type: object
+
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions/ping
+
+  /api/users/ping:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello8
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/ping
+      responses:
+        "200":
+          description: A successful response
+
+    get:
+      summary: ping user service
+      operationId: ping users
+
+      responses:
+        "200":
+          description: A successful ping
+          schema:
+            type: object
+
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/ping
+
 securityDefinitions:
   firebase:
     authorizationUrl: ""

@@ -18,7 +18,7 @@ const port = process.env.port || 8080;
 
 app.use("/api/users", userRouter);
 
-app.use("/health", (req: Request, res: Response) => {
+app.use("/api/users/ping", (req: Request, res: Response) => {
   res.status(200).json({
     message: "works",
   });

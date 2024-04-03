@@ -6,6 +6,8 @@ export const POST_ANSWER = "http://34.111.184.26:443/api/answers";
 export const POST_GUESTION = "http://34.111.184.26:443/api/questions";
 export const LOGOUT = "http://34.111.184.26:443/api/users/logout";
 export const LOGIN = "http://34.111.184.26:443/api/users/login";
+export const QUESTION_PING = "http://34.111.184.26:443/api/questions/ping";
+export const USER_PING = "http://34.111.184.26:443/api/users/ping";
 
 // export const SIGN_UP_END_POINT = "http://localhost:5000/api/users/signup";
 // export const GET_QUESTIONS_END_POINT = "http://localhost:7000/api/questions";
