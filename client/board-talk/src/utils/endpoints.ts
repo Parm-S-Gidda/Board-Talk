@@ -19,3 +19,5 @@ export const GET_USER_ENDPOINT = "https://user-service-hgqz27xhya-uc.a.run.app/a
 export const GET_ANSWERS = "https://question-service-hgqz27xhya-uc.a.run.app/api/answers";
 export const POST_ANSWER = "https://question-service-hgqz27xhya-uc.a.run.app/api/answers";
 export const POST_GUESTION = "https://question-service-hgqz27xhya-uc.a.run.app/api/questions";
+export const LOGOUT = "https://user-service-hgqz27xhya-uc.a.run.app/api/users/logout";
+export const LOGIN = "https://user-service-hgqz27xhya-uc.a.run.app/api/users/login";
