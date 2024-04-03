@@ -23,13 +23,7 @@ paths:
       responses:
         "200":
           description: A successful response
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-            Access-Control-Allow-Methods:
-              type: string
-            Access-Control-Allow-Headers:
-              type: string
+
     post:
       summary: register user
       operationId: signup
@@ -55,19 +49,13 @@ paths:
   /api/users/login:
     options:
       summary: CORS pre-flight
-      operationId: corsHello
+      operationId: corsHello2
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/login
       responses:
         "200":
           description: A successful response
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-            Access-Control-Allow-Methods:
-              type: string
-            Access-Control-Allow-Headers:
-              type: string
+
     post:
       summary: login user
       operationId: login
@@ -92,19 +80,13 @@ paths:
   /api/users/logout:
     options:
       summary: CORS pre-flight
-      operationId: corsHello
+      operationId: corsHello3
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/logout
       responses:
         "200":
           description: A successful response
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-            Access-Control-Allow-Methods:
-              type: string
-            Access-Control-Allow-Headers:
-              type: string
+
     post:
       summary: logout user
       operationId: logout
@@ -123,19 +105,13 @@ paths:
   /api/users:
     options:
       summary: CORS pre-flight
-      operationId: corsHello
+      operationId: corsHello4
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users
       responses:
         "200":
           description: A successful response
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-            Access-Control-Allow-Methods:
-              type: string
-            Access-Control-Allow-Headers:
-              type: string
+
     get:
       summary: get user
       operationId: get user
@@ -159,19 +135,13 @@ paths:
   /api/questions:
     options:
       summary: CORS pre-flight
-      operationId: corsHello
+      operationId: corsHello5
       x-google-backend:
         address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions
       responses:
         "200":
           description: A successful response
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-            Access-Control-Allow-Methods:
-              type: string
-            Access-Control-Allow-Headers:
-              type: string
+
     get:
       summary: get all questions
       operationId: get questions
@@ -215,19 +185,12 @@ paths:
   /api/answers:
     options:
       summary: CORS pre-flight
-      operationId: corsHello
+      operationId: corsHello6
       x-google-backend:
         address: https://question-service-nf23qxdm2q-uc.a.run.app/api/answers
       responses:
         "200":
           description: A successful response
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-            Access-Control-Allow-Methods:
-              type: string
-            Access-Control-Allow-Headers:
-              type: string
 
     get:
       summary: get all answers to a question
