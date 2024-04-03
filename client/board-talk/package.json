@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.2.21",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.7",
+    "firebase": "^10.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
@@ -19,7 +20,7 @@
     "react-scripts": "5.0.1",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4",
-    "typescript": "^5.4.2",
+    "typescript": "3.9.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
