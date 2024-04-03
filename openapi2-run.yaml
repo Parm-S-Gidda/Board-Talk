@@ -15,6 +15,14 @@ x-google-endpoints:
 
 paths:
   /api/users/signup:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/signup
+      responses:
+        "200":
+          description: A successful response
     post:
       summary: register user
       operationId: signup
@@ -38,6 +46,14 @@ paths:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/signup
 
   /api/users/login:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/login
+      responses:
+        "200":
+          description: A successful response
     post:
       summary: login user
       operationId: login
@@ -60,6 +76,14 @@ paths:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/login
 
   /api/users/logout:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/logout
+      responses:
+        "200":
+          description: A successful response
     post:
       summary: logout user
       operationId: logout
@@ -76,6 +100,14 @@ paths:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/logout
 
   /api/users:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello
+      x-google-backend:
+        address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users
+      responses:
+        "200":
+          description: A successful response
     get:
       summary: get user
       operationId: get user
@@ -97,6 +129,14 @@ paths:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users
 
   /api/questions:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions
+      responses:
+        "200":
+          description: A successful response
     get:
       summary: get all questions
       operationId: get questions
@@ -138,6 +178,15 @@ paths:
         address: https://question-service-nf23qxdm2q-uc.a.run.app/api/questions
 
   /api/answers:
+    options:
+      summary: CORS pre-flight
+      operationId: corsHello
+      x-google-backend:
+        address: https://question-service-nf23qxdm2q-uc.a.run.app/api/answers
+      responses:
+        "200":
+          description: A successful response
+
     get:
       summary: get all answers to a question
       operationId: get answers
