@@ -1,9 +1,7 @@
-import { eq } from "drizzle-orm";
 import {
   GetAnswerRequest,
   PostAnswerRequest,
 } from "../middlewares/validator.requests";
-import { answers } from "../schema/schema";
 import { v4 as uuidv4 } from "uuid";
 import { Datastore, PropertyFilter } from "@google-cloud/datastore";
 
