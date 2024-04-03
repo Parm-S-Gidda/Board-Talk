@@ -33,7 +33,7 @@ function SignUp() {
 
       console.log("signup:", resp.data);
       updateUser(resp.data);
-      navigate("/dashboard");
+      navigate("/home/dashboard");
     } catch (error) {
       console.log(error);
     }
