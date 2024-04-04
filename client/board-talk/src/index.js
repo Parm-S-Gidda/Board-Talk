@@ -15,6 +15,10 @@ import { UserProvider } from "./context/userContext"
 import Question from "./routes/Question"
 import Container from './routes/container/Container';
 import Root from "./routes/Root"
+import Navigation from './routes/navigation';
+import axios from "axios"
+
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const router = createBrowserRouter([
   {
@@ -22,25 +26,33 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       {
-        path: "/signup",
+        path: "/",
         element: <SignUp />,
+        index: true
       },
       {
         path: "/login",
         element: <Login />
       },
       {
-        path: "/dashboard",
-        element: <Dashboard />
+        path: "/home",
+        element: <Navigation />,
+        children: [
+          {
+            path: "/home/dashboard",
+            element: <Dashboard />
+          },
+          {
+            path: "/home/question",
+            element: <Question />
+          },
+          {
+            path: "/home/whiteboard",
+            element: <Container />
+          }
+        ]
       },
-      {
-        path: "/question",
-        element: <Question />
-      },
-      {
-        path: "/whiteboard",
-        element: <Container />
-      }
+
     ]
   },
 

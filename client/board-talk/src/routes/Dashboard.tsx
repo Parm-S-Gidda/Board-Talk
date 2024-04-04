@@ -9,6 +9,7 @@ import {
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { RiSendPlane2Fill } from "react-icons/ri";
+import Cookies from "js-cookie";
 
 type Questions = {
   question_id: string;
@@ -36,7 +37,7 @@ export type QuestionsProcessed = {
 function Dashboard() {
   const { user, updateUser } = useUser();
 
-  console.log(user);
+  console.log("token:", Cookies.get("accessToken"));
   const [questions, setQuestions] = useState<QuestionsProcessed[]>([]);
   useEffect(() => {
     const getUser = async (user_id: string): Promise<AxiosResponse<User>> => {
@@ -44,11 +45,15 @@ function Dashboard() {
         params: {
           user_id,
         },
+        headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
       });
     };
     const getQuestions = async () => {
       const resp: AxiosResponse<Questions> = await axios.get(
-        GET_QUESTIONS_END_POINT
+        GET_QUESTIONS_END_POINT,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+        }
       );
 
       const questions = resp.data;
@@ -120,6 +125,9 @@ function Dashboard() {
           user_id: user.user_id,
           title: "",
           content: question,
+        },
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
         }
       );
 
@@ -164,11 +172,11 @@ function Dashboard() {
     // </div>
 
     <div className="h-full w-full flex flex-col">
-      <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 overflow-y-auto">
+      <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 max-h-9/10 overflow-y-auto">
         {questions &&
           questions.map((question) => <QuestionCard question={question} />)}
       </div>
-      <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center">
+      <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center shadow-md">
         <input
           placeholder="Question"
           className="bg-gray-200 px-3 h-full w-11/12 rounded-2xl outline-none"

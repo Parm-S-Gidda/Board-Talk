@@ -1,9 +1,8 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
 import userRouter from "./routes/user.route";
 import cors from "cors";
-
-dotenv.config();
+import cookieParser from "cookie-parser";
+import compression from "compression";
 
 const app = express();
 
@@ -11,11 +10,15 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use(cookieParser());
+
+app.use(compression());
+
 const port = process.env.port || 8080;
 
 app.use("/api/users", userRouter);
 
-app.use("/health", (req: Request, res: Response) => {
+app.use("/api/users/ping", (req: Request, res: Response) => {
   res.status(200).json({
     message: "works",
   });

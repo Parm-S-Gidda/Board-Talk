@@ -29,6 +29,7 @@ class Container extends React.Component {
     return (
       <div className="container">
         <div class="tools-section">
+          <div className="logo">Board-Talk &nbsp;</div>
           <div className="color-picker-container">
             Select Brush Color : &nbsp;
             <input
@@ -54,7 +55,10 @@ class Container extends React.Component {
           </div>
         </div>
 
-        <div class="board-container">
+        <div
+          class="board-container"
+          style={{ cursor: "url(cursorpaint.png), auto" }}
+        >
           <Board color={this.state.color} size={this.state.size}></Board>
         </div>
       </div>

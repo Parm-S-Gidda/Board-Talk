@@ -1,10 +1,19 @@
+import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LOGIN, LOGOUT } from "../utils/endpoints";
+import { User } from "./Dashboard";
+import { useUser } from "../hooks/user";
+import Cookies from "js-cookie";
 
 type FormType = {
   name: string;
   email: string;
   password: string;
+};
+
+type Message = {
+  message: string;
 };
 
 export default function Login() {
@@ -14,15 +23,38 @@ export default function Login() {
     password: "",
   });
 
+  const { user, updateUser } = useUser();
+
   const navigate = useNavigate();
 
   const onSignUp = () => {
-    navigate("/signup");
+    navigate("/");
+  };
+
+  const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const resp: AxiosResponse<any> = await axios.post(LOGIN, form);
+
+      const userResponse: User = {
+        name: resp.data.name,
+        email: resp.data.email,
+        user_id: resp.data.user_id,
+        createdAt: resp.data.createdAt,
+      };
+
+      updateUser(userResponse);
+      Cookies.set("accessToken", resp.data.accessToken);
+      navigate("/home/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <form
       className="h-full w-full flex flex-row justify-center items-center"
-      // onSubmit={onSignUp}
+      onSubmit={onLogin}
     >
       <div className="flex flex-col gap-y-3 bg-white shadow-2xl px-14 py-7 rounded-xl">
         <span className="text-center text-3xl">Log in</span>
@@ -30,6 +62,7 @@ export default function Login() {
           <input
             type="text"
             name="email"
+            value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             className="w-72 h-11 border-2 focus:border-blue-green outline-none rounded-lg px-3 peer border-gray-300"
           ></input>
@@ -46,6 +79,7 @@ export default function Login() {
           <input
             type="password"
             name="password"
+            value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="w-72 h-11 border-2 focus:border-blue-green outline-none rounded-lg px-3 peer border-gray-300"
           ></input>

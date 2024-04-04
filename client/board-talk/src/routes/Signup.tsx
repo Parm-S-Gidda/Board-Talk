@@ -1,9 +1,15 @@
 import { useState } from "react";
 import axios, { AxiosResponse } from "axios";
-import { SIGN_UP_END_POINT } from "../utils/endpoints";
+import {
+  QUESTION_PING,
+  SIGN_UP_END_POINT,
+  USER_PING,
+} from "../utils/endpoints";
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { User } from "./Dashboard";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
 
 type FormType = {
   name: string;
@@ -12,6 +18,19 @@ type FormType = {
 };
 
 function SignUp() {
+  useEffect(() => {
+    const onPing = async () => {
+      const pings = [axios.get(QUESTION_PING), axios.get(USER_PING)];
+
+      try {
+        await Promise.all(pings);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    onPing();
+  }, []);
   const [form, setForm] = useState<FormType>({
     email: "",
     name: "",
@@ -26,14 +45,20 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const resp: AxiosResponse<User> = await axios.post(
+      const resp: AxiosResponse<any> = await axios.post(
         SIGN_UP_END_POINT,
         form
       );
 
-      console.log("signup:", resp.data);
-      updateUser(resp.data);
-      navigate("/dashboard");
+      const userResponse: User = {
+        name: resp.data.name,
+        email: resp.data.email,
+        user_id: resp.data.user_id,
+        createdAt: resp.data.createdAt,
+      };
+      updateUser(userResponse);
+      Cookies.set("accessToken", resp.data.accessToken);
+      navigate("/home/dashboard");
     } catch (error) {
       console.log(error);
     }
