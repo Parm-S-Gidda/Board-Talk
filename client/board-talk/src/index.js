@@ -16,6 +16,9 @@ import Question from "./routes/Question"
 import Container from './routes/container/Container';
 import Root from "./routes/Root"
 import Navigation from './routes/navigation';
+import axios from "axios"
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const router = createBrowserRouter([
   {
