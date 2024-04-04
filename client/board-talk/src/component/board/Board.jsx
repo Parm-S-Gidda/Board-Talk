@@ -20,7 +20,7 @@ class Board extends React.Component {
 
     this.socket = new WebSocket(
       "wss://" +
-        "whiteboard-service-ljofwenvaq-uw.a.run.app" +
+        "whiteboard-service-2pmnanshaq-uw.a.run.app" +
         "/ws/whiteboard/" +
         1 +
         "/"
@@ -30,7 +30,7 @@ class Board extends React.Component {
       console.log("WebSocket connection established.");
       clearInterval(this.retryConnectionInterval);
       this.retryAttempts = 1;
- 
+
 
       //upon opening the socket start a 2 minute timer which resets when the user sends a message
       this.startUserTimeout();
@@ -61,19 +61,19 @@ class Board extends React.Component {
           else{
             clearInterval(this.retryConnectionInterval);
             if(alert("Sorry, you have disconnected from our server. Press OK to try to reconnect.")){}
-            else    window.location.reload(); 
+            else    window.location.reload();
           }
 
           this.retryAttempts++;
-        }, 3000); 
-        
-        
+        }, 3000);
+
+
       }
       else{
-       
+
 
         if(alert("You have been disconnected due to inactivity. Press OK to reconnect.")){}
-        else    window.location.reload();   
+        else    window.location.reload();
       }
     };
 
@@ -111,9 +111,9 @@ class Board extends React.Component {
 
   startUserTimeout() {
 
-    //reset the timeout clock 
+    //reset the timeout clock
     clearTimeout(this.timeoutUser);
-    
+
     console.log("Timeout Timer Started");
     this.timeoutUser = setTimeout(() => {
       this.userTimeOut();
@@ -202,7 +202,7 @@ class Board extends React.Component {
         );
         console.log("sent data");
         console.log("Reset Timeout Timer");
-        
+
         root.startUserTimeout();
       }, 1000);
     };

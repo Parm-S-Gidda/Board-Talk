@@ -10,3 +10,5 @@ export const POST_ANSWER =
   "https://question-service-2pmnanshaq-uc.a.run.app/api/answers";
 export const POST_GUESTION =
   "https://question-service-2pmnanshaq-uc.a.run.app/api/questions";
+export const LOGOUT = "http://user-service-2pmnanshaq-uc.a.run.app/api/users/logout";
+export const LOGIN = "http://user-service-2pmnanshaq-uc.a.run.app/api/users/login";

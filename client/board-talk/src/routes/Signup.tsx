@@ -4,6 +4,7 @@ import { SIGN_UP_END_POINT } from "../utils/endpoints";
 import { useUser } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { User } from "./Dashboard";
+import Cookies from "js-cookie";
 
 type FormType = {
   name: string;
@@ -32,16 +33,21 @@ function SignUp() {
 
       try {
 
-        console.log("Trying Signup");
-        const resp: AxiosResponse<User> = await axios.post(
+        const resp: AxiosResponse<any> = await axios.post(
           SIGN_UP_END_POINT,
-          form, 
-          {timeout: 10000} //tiemout after 10 seconds 
+          form
         );
 
-        console.log("successful signup:", resp.data);
-        updateUser(resp.data);
-        navigate("/dashboard");
+        const userResponse: User = {
+          name: resp.data.name,
+          email: resp.data.email,
+          user_id: resp.data.user_id,
+          createdAt: resp.data.createdAt,
+        };
+        updateUser(userResponse);
+        Cookies.set("accessToken", resp.data.accessToken);
+        navigate("/home/dashboard");
+
         break;
 
       } catch (error) {
@@ -50,16 +56,14 @@ function SignUp() {
         if(retryAttempt < 6){
           console.log("Sign up Error. Retrying. Attempt: " + retryAttempt + "/5");
           retryAttempt++;
-          continue; 
+          continue;
         }
         else{
-          
+
           alert("Sorry, we ran into an error Signing you up. Please try again later");
           break;
         }
-          
-       
-      
+
       }
     }
   };

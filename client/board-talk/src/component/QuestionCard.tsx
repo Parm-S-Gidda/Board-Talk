@@ -11,7 +11,7 @@ type QuestionCard = {
 function QuestionCard({ question }: QuestionCard) {
   const navigate = useNavigate();
   const onComment = () => {
-    navigate("/question", {
+    navigate("/home/question", {
       state: question,
     });
   };
@@ -19,7 +19,6 @@ function QuestionCard({ question }: QuestionCard) {
   const userName = question.user ? question.user.name : 'Unknown';
 
   return (
-
     <div className="flex flex-row w-full gap-x-2 bg-white rounded-2xl shadow-sm py-2 px-4">
       <div className="flex flex-col items-center">
         <img

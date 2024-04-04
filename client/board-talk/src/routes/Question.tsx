@@ -16,6 +16,7 @@ import { useUser } from "../hooks/user";
 import QuestionCard from "../component/QuestionCard";
 import AnswerCard from "../component/AnswerCard";
 import { RiSendPlane2Fill } from "react-icons/ri";
+import Cookies from "js-cookie";
 
 type Answer = {
   answer_id: string;
@@ -32,12 +33,12 @@ export type AnswerProcessed = {
   author: User;
   createdAt: string;
 };
+
 function Question() {
   const location: Location<QuestionsProcessed> = useLocation();
 
   const [answers, setAnswers] = useState<AnswerProcessed[] | null>(null);
   const [postAnswer, setPostAnswer] = useState<string>("");
-  const { user } = useUser();
 
   const MAX_RETRIES = 5;
   const delay = (ms: number) => {
@@ -56,16 +57,21 @@ function Question() {
             params: {
               question_id: location.state.question_id,
             },
-            timeout: 5000
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
           });
 
-          // Process response data and update state
           const getUser = async (
             user_id: string
           ): Promise<AxiosResponse<User>> => {
             return axios.get(GET_USER_ENDPOINT, {
               params: {
                 user_id,
+              },
+              timeout: 5000,
+              headers: {
+                Authorization: `Bearer ${Cookies.get("accessToken")}`,
               },
             });
           };
@@ -115,7 +121,7 @@ function Question() {
         } catch (error) {
           console.log(error);
           currentRetry++; // Increment retry count on error
-          await delay(RETRY_DELAY_MS)
+          await delay(RETRY_DELAY_MS);
         }
       }
 
@@ -127,39 +133,59 @@ function Question() {
     fetchData();
   }, [location.state.question_id]);
 
+  const { user, updateUser } = useUser();
+
   const onPost = async () => {
     let currentRetry = 0;
     let success = false;
-    let newAnswers: AnswerProcessed[] = []; // Store new answers to batch update state
+    let newAnswers: AnswerProcessed[] = [];
 
     while (currentRetry < MAX_RETRIES && !success) {
       try {
-        const response = await axios.post(POST_ANSWER, {
-          user_id: user.user_id,
-          question_id: location.state.question_id,
-          content: postAnswer,
-        }, {
-          timeout: 5000,
-        });
+        const response = await axios.post(
+          POST_ANSWER,
+          {
+            user_id: user.user_id,
+            question_id: location.state.question_id,
+            content: postAnswer,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }
+        );
 
-        // Request was successful
-        success = true;
         const answer: AnswerProcessed = response.data;
 
-        newAnswers.push({ // Store new answer in the batch
-          answer_id: answer.answer_id,
-          content: answer.content,
-          question_id: answer.question_id,
-          author: user,
-          createdAt: answer.createdAt,
-        });
+        if (answers) {
+          setAnswers([
+            ...answers,
+            {
+              answer_id: answer.answer_id,
+              content: answer.content,
+              question_id: answer.question_id,
+              author: user,
+              createdAt: answer.createdAt,
+            },
+          ]);
+        } else {
+          setAnswers([
+            {
+              answer_id: answer.answer_id,
+              content: answer.content,
+              question_id: answer.question_id,
+              author: user,
+              createdAt: answer.createdAt,
+            },
+          ]);
+        }
 
-        setPostAnswer("");
+        success = true;
       } catch (error) {
         console.log(error);
         currentRetry++;
-        newAnswers = [];
-        await delay(RETRY_DELAY_MS)
+        await delay(RETRY_DELAY_MS);
       }
     }
 
