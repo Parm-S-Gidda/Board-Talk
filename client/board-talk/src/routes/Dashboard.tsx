@@ -34,80 +34,110 @@ export type QuestionsProcessed = {
   createdAt: string;
 };
 
+const MAX_RETRIES = 5;
+const RETRY_DELAY_MS = 1000; // 1 second
+
 function Dashboard() {
   const { user, updateUser } = useUser();
 
+
   console.log("token:", Cookies.get("accessToken"));
   const [questions, setQuestions] = useState<QuestionsProcessed[]>([]);
+
   useEffect(() => {
-    const getUser = async (user_id: string): Promise<AxiosResponse<User>> => {
-      return axios.get(GET_USER_ENDPOINT, {
-        params: {
-          user_id,
-        },
-        headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
-      });
-    };
-    const getQuestions = async () => {
-      const resp: AxiosResponse<Questions> = await axios.get(
-        GET_QUESTIONS_END_POINT,
-        {
-          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
-        }
-      );
+    const fetchData = async () => {
+      let currentRetry = 0;
+      let success = false;
 
-      const questions = resp.data;
-
-      //console.log(questions);
-
-      const promises: Promise<AxiosResponse<User>>[] = [];
-
-      questions.forEach((question) => {
-        promises.push(getUser(question.user_id));
-      });
-
-      const responses = await Promise.all(promises);
-
-      let unique: { [key: string]: boolean } = {};
-
-      let users = responses.map((resp) => resp.data);
-
-      users = users.filter((user) => {
-        const userKey = JSON.stringify(user);
-
-        let isUnique = !unique[userKey];
-
-        unique[userKey] = true;
-
-        return isUnique;
-      });
-
-      const questionsProcessed: QuestionsProcessed[] = [];
-
-      questions.forEach((question) => {
-        users.forEach((user) => {
-          if (user.user_id == question.user_id) {
-            questionsProcessed.push({
-              question_id: question.question_id,
-              title: question.title,
-              content: question.content,
-              user: user,
-              createdAt: question.createdAt,
+      while (currentRetry < MAX_RETRIES && !success) {
+        try {
+          const getUser = async (user_id: string): Promise<AxiosResponse<User>> => {
+            return axios.get(GET_USER_ENDPOINT, {
+              params: {
+                user_id,
+              },
+              timeout: 5000,
+              headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
             });
-          }
-        });
-      });
+          };
 
-      //console.log(questionsProcessed);
-      return questionsProcessed;
-    };
+          const getQuestions = async () => {
+            const resp: AxiosResponse<Questions> = await axios.get(
+              GET_QUESTIONS_END_POINT,
+              {
+                timeout: 5000,
+                headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+              }
+            );
 
-    getQuestions()
-      .then((questions) => setQuestions(questions))
-      .catch((error: any) => {
-        console.log(error);
-      });
-  }, []);
+            const questions = resp.data;
+
+            //console.log(questions);
+
+            const promises: Promise<AxiosResponse<User>>[] = [];
+
+            questions.forEach((question) => {
+              promises.push(getUser(question.user_id));
+            });
+
+            const responses = await Promise.all(promises);
+
+            let unique: { [key: string]: boolean } = {};
+
+            let users = responses.map((resp) => resp.data);
+
+            users = users.filter((user) => {
+              const userKey = JSON.stringify(user);
+
+              let isUnique = !unique[userKey];
+
+              unique[userKey] = true;
+
+              return isUnique;
+            });
+
+            const questionsProcessed: QuestionsProcessed[] = [];
+
+            questions.forEach((question) => {
+              users.forEach((user) => {
+                if (user.user_id == question.user_id) {
+                  questionsProcessed.push({
+                    question_id: question.question_id,
+                    title: question.title,
+                    content: question.content,
+                    user: user,
+                    createdAt: question.createdAt,
+                  });
+                }
+              });
+            });
+
+            //console.log(questionsProcessed);
+            return questionsProcessed;
+          };
+
+          getQuestions()
+          .then((questions) => setQuestions(questions))
+          .catch((error: any) => {
+            console.log(error);
+          });
+
+          success = true;
+
+        } catch (error) {
+          console.log("Error:", error);
+          currentRetry++;
+          await delay(RETRY_DELAY_MS);
+        }
+      }
+
+      if (!success) {
+        alert("Server is currently unavailable. Please try again later")
+      }
+  };
+
+  fetchData();
+}, []);
 
   const navigate = useNavigate();
 
@@ -118,63 +148,58 @@ function Dashboard() {
   const [question, setQuestion] = useState<string>("");
 
   const onQuestionPosted = async () => {
-    try {
-      const resp: AxiosResponse<QuestionsProcessed> = await axios.post(
-        POST_GUESTION,
-        {
-          user_id: user.user_id,
-          title: "",
-          content: question,
-        },
-        {
-          headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
-        }
-      );
+    let currentRetry = 0;
+    let success = false;
 
-      setQuestions([
-        ...questions,
-        {
-          question_id: resp.data.question_id,
-          content: resp.data.content,
-          user: user,
-          title: resp.data.title,
-          createdAt: resp.data.createdAt,
-        },
-      ]);
+    while (currentRetry < MAX_RETRIES && !success) {
+      try {
+        const resp: AxiosResponse<QuestionsProcessed> = await axios.post(
+          POST_GUESTION,
+          {
+            user_id: user.user_id,
+            title: "",
+            content: question,
+          },
+          {
+            timeout: 5000,
+            headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+          }
+        );
 
-      setQuestion("");
-    } catch (error) {
-      console.log(error);
+        setQuestions([
+          ...questions,
+          {
+            question_id: resp.data.question_id,
+            content: resp.data.content,
+            user: user,
+            title: resp.data.title,
+            createdAt: resp.data.createdAt,
+          },
+        ]);
+
+      } catch (error) {
+        console.log("Error posting question:", error);
+        currentRetry++;
+        await delay(RETRY_DELAY_MS);
+      }
+    }
+
+    if (!success) {
+      alert("Server is currently unavailable. Please try again later")
     }
   };
 
+  const delay = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
+
   return (
-    // <div className="w-screen h-screen">
-    //   <div className="w-screen h-screen grid grid-cols-4 gap-y-7 p-10">
-    //     {questions &&
-    //       questions.map((question) => <QuestionCard question={question} />)}
-    //   </div>
-
-    //   <div className="fixed bottom-20 right-20 flex gap-x-10">
-    //     <button
-    //       className="bg-gray-700 w-40 h-16 rounded-3xl shadow-2xl text-white"
-    //       onClick={onWhiteboard}
-    //     >
-    //       Start a whiteboard
-    //     </button>
-    //     <button
-    //       className="bg-gray-700 w-36 h-16 rounded-3xl shadow-2xl text-white"
-    //       onClick={onPostQuestion}
-    //     >
-    //       Post question
-    //     </button>
-    //   </div>
-    // </div>
-
     <div className="h-full w-full flex flex-col">
       <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 max-h-9/10 overflow-y-auto">
         {questions &&
-          questions.map((question) => <QuestionCard question={question} />)}
+          questions.map((question) => (
+            <QuestionCard key={question.question_id} question={question} />
+          ))}
       </div>
       <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center shadow-md">
         <input

@@ -15,6 +15,9 @@ function QuestionCard({ question }: QuestionCard) {
       state: question,
     });
   };
+
+  const userName = question.user ? question.user.name : 'Unknown';
+
   return (
     <div className="flex flex-row w-full gap-x-2 bg-white rounded-2xl shadow-sm py-2 px-4">
       <div className="flex flex-col items-center">
@@ -25,7 +28,7 @@ function QuestionCard({ question }: QuestionCard) {
       </div>
       <div className="flex flex-col gap-y-2">
         <div className="flex flex-row">
-          <span className="font-bold">{question.user.name}</span>
+          <span className="font-bold">{userName}</span>
           <span className="text-sm mt-0.5">
             , {timeElapsed(new Date(question.createdAt), new Date())}
           </span>

@@ -33,97 +33,130 @@ export type AnswerProcessed = {
   author: User;
   createdAt: string;
 };
+
 function Question() {
   const location: Location<QuestionsProcessed> = useLocation();
 
   const [answers, setAnswers] = useState<AnswerProcessed[] | null>(null);
+  const [postAnswer, setPostAnswer] = useState<string>("");
+
+  const MAX_RETRIES = 5;
+  const delay = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
+  const RETRY_DELAY_MS = 1000;
 
   useEffect(() => {
-    //console.log("location:", location.state);
-    axios
-      .get(GET_ANSWERS, {
-        params: {
-          question_id: location.state.question_id,
-        },
-        headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
-      })
-      .then(async (resp: AxiosResponse<Answer[]>) => {
-        const getUser = async (
-          user_id: string
-        ): Promise<AxiosResponse<User>> => {
-          return axios.get(GET_USER_ENDPOINT, {
+    const fetchData = async () => {
+      let currentRetry = 0;
+      let success = false;
+
+      while (currentRetry < MAX_RETRIES && !success) {
+        try {
+          const response = await axios.get(GET_ANSWERS, {
             params: {
-              user_id,
+              question_id: location.state.question_id,
             },
-            headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
           });
-        };
 
-        const answers = resp.data;
+          const getUser = async (
+            user_id: string
+          ): Promise<AxiosResponse<User>> => {
+            return axios.get(GET_USER_ENDPOINT, {
+              params: {
+                user_id,
+              },
+              timeout: 5000,
+              headers: {
+                Authorization: `Bearer ${Cookies.get("accessToken")}`,
+              },
+            });
+          };
 
-        const promises: Promise<AxiosResponse<User>>[] = [];
+          const answers: Answer[] = response.data;
 
-        answers.forEach((answer) => {
-          promises.push(getUser(answer.author_id));
-        });
+          const promises: Promise<AxiosResponse<User>>[] = [];
 
-        const responses = await Promise.all(promises);
-
-        let unique: { [key: string]: boolean } = {};
-
-        let users = responses.map((resp) => resp.data);
-
-        users = users.filter((user) => {
-          const userKey = JSON.stringify(user);
-
-          let isUnique = !unique[userKey];
-
-          unique[userKey] = true;
-
-          return isUnique;
-        });
-
-        const answerProcessed: AnswerProcessed[] = [];
-
-        answers.forEach((answer) => {
-          users.forEach((user) => {
-            if (user.user_id == answer.author_id) {
-              answerProcessed.push({
-                answer_id: answer.answer_id,
-                author: user,
-                content: answer.content,
-                createdAt: answer.createdAt,
-                question_id: answer.question_id,
-              });
-            }
+          answers.forEach((answer) => {
+            promises.push(getUser(answer.author_id));
           });
-        });
 
-        setAnswers(answerProcessed);
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
-  }, []);
+          const responses = await Promise.all(promises);
 
-  const [postAnswer, setPostAnswer] = useState<string>("");
+          let unique: { [key: string]: boolean } = {};
+
+          let users = responses.map((resp) => resp.data);
+
+          users = users.filter((user) => {
+            const userKey = JSON.stringify(user);
+
+            let isUnique = !unique[userKey];
+
+            unique[userKey] = true;
+
+            return isUnique;
+          });
+
+          const answerProcessed: AnswerProcessed[] = [];
+
+          answers.forEach((answer) => {
+            users.forEach((user) => {
+              if (user.user_id === answer.author_id) {
+                answerProcessed.push({
+                  answer_id: answer.answer_id,
+                  author: user,
+                  content: answer.content,
+                  createdAt: answer.createdAt,
+                  question_id: answer.question_id,
+                });
+              }
+            });
+          });
+
+          setAnswers(answerProcessed);
+          success = true; // Set success to true if request is successful
+        } catch (error) {
+          console.log(error);
+          currentRetry++; // Increment retry count on error
+          await delay(RETRY_DELAY_MS);
+        }
+      }
+
+      if (!success) {
+        alert('Server is currently unavailable. Please try again later');
+      }
+    };
+
+    fetchData();
+  }, [location.state.question_id]);
 
   const { user, updateUser } = useUser();
 
-  const onPost = () => {
-    console.log("accesToken:", Cookies.get("accessToken"));
-    axios
-      .post(
-        POST_ANSWER,
-        {
-          user_id: user.user_id,
-          question_id: location.state.question_id,
-          content: postAnswer,
-        },
-        { headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` } }
-      )
-      .then((resp) => {
-        const answer: AnswerProcessed = resp.data;
+  const onPost = async () => {
+    let currentRetry = 0;
+    let success = false;
+    let newAnswers: AnswerProcessed[] = [];
+
+    while (currentRetry < MAX_RETRIES && !success) {
+      try {
+        const response = await axios.post(
+          POST_ANSWER,
+          {
+            user_id: user.user_id,
+            question_id: location.state.question_id,
+            content: postAnswer,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }
+        );
+
+        const answer: AnswerProcessed = response.data;
 
         if (answers) {
           setAnswers([
@@ -148,52 +181,28 @@ function Question() {
           ]);
         }
 
-        setPostAnswer("");
-      })
-      .catch((error: any) => {
+        success = true;
+      } catch (error) {
         console.log(error);
-      });
+        currentRetry++;
+        await delay(RETRY_DELAY_MS);
+      }
+    }
+
+    if (!success) {
+      alert('Server is currently unavailable. Please try again later');
+    }
+
+    if (newAnswers.length > 0) {
+      setAnswers(prevAnswers => prevAnswers ? [...prevAnswers, ...newAnswers] : newAnswers);
+    }
   };
+
   return (
-    // <div className="w-screen h-screen flex flex-col justify-start items-center gap-y-14">
-    //   <div className="flex h-20 rounded-2xl bg-gray-200  mt-16 flex-row w-3/5 justify-center items-center gap-x-4 shadow-lg ">
-    //     <input
-    //       className="w-full p-5 outline-none focus:outline-none bg-gray-200"
-    //       type="text"
-    //       placeholder="Leave an answer...."
-    //       value={postAnswer}
-    //       onChange={(e) => setPostAnswer(e.target.value)}
-    //     ></input>
-
-    //     <button
-    //       className="bg-gray-700 rounded-full m-5 text-gray-50 w-20"
-    //       onClick={onPost}
-    //     >
-    //       Post
-    //     </button>
-    //   </div>
-
-    //   <div className="w-3/5 h-1/4 flex flex-col rounded-2xl gap-y-5 bg-gray-200 p-5 shadow-lg">
-    //     <span>Question by {location.state.user.name}</span>
-    //     <span className="text-ellipsis overflow-hidden">
-    //       {location.state.content}
-    //     </span>
-    //   </div>
-    //   {answers &&
-    //     answers.map((answer) => (
-    //       <div className="w-3/5 h-1/4 flex flex-col rounded-2xl gap-y-5 bg-gray-200 p-5 shadow-lg">
-    //         <span>Answered by {answer.author.name}</span>
-    //         <span className="text-ellipsis overflow-hidden">
-    //           {answer.content}
-    //         </span>
-    //       </div>
-    //     ))}
-    // </div>
-
     <div className="h-full w-full flex flex-col">
       <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 overflow-y-auto">
         <QuestionCard question={location.state} />
-        {answers && answers.map((answer) => <AnswerCard answer={answer} />)}
+        {answers && answers.map((answer) => <AnswerCard key={answer.answer_id} answer={answer} />)}
       </div>
       <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center">
         <input
@@ -202,7 +211,7 @@ function Question() {
           onChange={(e) => setPostAnswer(e.target.value)}
           value={postAnswer}
         />
-        <div onClick={() => onPost()}>
+        <div onClick={onPost}>
           <RiSendPlane2Fill
             color="#465858"
             size={30}

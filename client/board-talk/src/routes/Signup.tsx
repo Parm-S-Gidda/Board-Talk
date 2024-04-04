@@ -39,29 +39,54 @@ function SignUp() {
 
   const { user, updateUser } = useUser();
 
+
   const navigate = useNavigate();
 
   const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const resp: AxiosResponse<any> = await axios.post(
-        SIGN_UP_END_POINT,
-        form
-      );
+    let retryAttempt = 1;
 
-      const userResponse: User = {
-        name: resp.data.name,
-        email: resp.data.email,
-        user_id: resp.data.user_id,
-        createdAt: resp.data.createdAt,
-      };
-      updateUser(userResponse);
-      Cookies.set("accessToken", resp.data.accessToken);
-      navigate("/home/dashboard");
-    } catch (error) {
-      console.log(error);
+    while(true){
+      console.log("test2");
+      console.log(retryAttempt);
+      try {
+
+        const resp: AxiosResponse<any> = await axios.post(
+          SIGN_UP_END_POINT,
+          form
+        );
+
+        const userResponse: User = {
+          name: resp.data.name,
+          email: resp.data.email,
+          user_id: resp.data.user_id,
+          createdAt: resp.data.createdAt,
+        };
+        updateUser(userResponse);
+        Cookies.set("accessToken", resp.data.accessToken);
+        navigate("/home/dashboard");
+        console.log("test");
+        break;
+
+      } catch (error) {
+
+        console.log("error: " + error);
+        if(retryAttempt < 6){
+          console.log("Sign up Error. Retrying. Attempt: " + retryAttempt + "/5");
+          retryAttempt++;
+          continue;
+        }
+        else{
+
+          alert("Sorry, we ran into an error Signing you up. Please try again later");
+          break;
+        }
+
+      }
     }
+
+    console.log("test3");
   };
 
   const onLogin = () => {
