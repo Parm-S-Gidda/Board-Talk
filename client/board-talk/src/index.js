@@ -18,7 +18,7 @@ import Root from "./routes/Root"
 import Navigation from './routes/navigation';
 import axios from "axios"
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const router = createBrowserRouter([
   {

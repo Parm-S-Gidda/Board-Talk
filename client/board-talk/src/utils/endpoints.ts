@@ -1,4 +1,4 @@
-const HOST = "https://35.186.198.117/api/";
+const HOST = "http://35.186.198.117:443/api/";
 
 export const SIGN_UP_END_POINT = `${HOST}users/signup`;
 export const GET_QUESTIONS_END_POINT = `${HOST}questions`;
