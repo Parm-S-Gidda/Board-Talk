@@ -22,7 +22,11 @@ function SignUp() {
     const onPing = async () => {
       const pings = [axios.get(QUESTION_PING), axios.get(USER_PING)];
 
-      await Promise.all(pings);
+      try {
+        await Promise.all(pings);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     onPing();
