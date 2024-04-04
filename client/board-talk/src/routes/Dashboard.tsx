@@ -177,6 +177,8 @@ function Dashboard() {
           },
         ]);
 
+        success = true;
+
       } catch (error) {
         console.log("Error posting question:", error);
         currentRetry++;
