@@ -6,7 +6,9 @@ class Board extends React.Component {
   timeout;
   timeoutUser;
   socket;
+  retryConnectionInterval;
   timeoutClose = false;
+  retryAttempts = 1;
 
   ctx;
   isDrawing = false;
@@ -26,9 +28,17 @@ class Board extends React.Component {
 
     this.socket.onopen = () => {
       console.log("WebSocket connection established.");
+      clearInterval(this.retryConnectionInterval);
+      this.retryAttempts = 1;
+ 
 
       //upon opening the socket start a 2 minute timer which resets when the user sends a message
       this.startUserTimeout();
+    };
+
+    this.socket.onerror = (event) =>{
+
+      console.log("error");
     };
 
 
@@ -37,19 +47,33 @@ class Board extends React.Component {
 
       //only try reconnecting if the disconnect was not due to a inactivity reconnect
       if(!(this.timeoutClose)){
+
+
+
         //client will try to reconnect to server every 3 seconds of being disconnected while still on page
-        setTimeout(() => {
-          this.socket = new WebSocket(
-            "wss://" +
-              "whiteboard-service-ljofwenvaq-uw.a.run.app" +
-              "/ws/whiteboard/" +
-              1 +
-              "/"
-          );
+        this.retryConnectionInterval = setInterval(() => {
+
+          if(this.retryAttempts < 6){
+
+            console.log("Trying to reconnect. Attempt: " + this.retryAttempts + "/5");
+            this.socket = new WebSocket("wss://" +"whiteboard-service-ljofwenvaq-uw.a.run.app" +"/ws/whiteboard/" +1 +"/");
+          }
+          else{
+            clearInterval(this.retryConnectionInterval);
+            if(alert("Sorry, you have disconnected from our server. Press OK to try to reconnect.")){}
+            else    window.location.reload(); 
+          }
+
+          this.retryAttempts++;
         }, 3000); 
+        
+        
       }
       else{
-        alert("Your session has ended due to inactivity. Please refresh the page to continue.");
+       
+
+        if(alert("You have been disconnected due to inactivity. Press OK to reconnect.")){}
+        else    window.location.reload();   
       }
     };
 
