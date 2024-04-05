@@ -20,7 +20,7 @@ class Board extends React.Component {
 
     this.socket = new WebSocket(
       "wss://" +
-        "whiteboard-service-2pmnanshaq-uw.a.run.app" +
+        "whiteboard-service-hgqz27xhya-uw.a.run.app" +
         "/ws/whiteboard/" +
         1 +
         "/"
@@ -56,7 +56,7 @@ class Board extends React.Component {
           if(this.retryAttempts < 6){
 
             console.log("Trying to reconnect. Attempt: " + this.retryAttempts + "/5");
-            this.socket = new WebSocket("wss://" +"whiteboard-service-ljofwenvaq-uw.a.run.app" +"/ws/whiteboard/" +1 +"/");
+            this.socket = new WebSocket("wss://" +"whiteboard-service-hgqz27xhya-uw.a.run.app" +"/ws/whiteboard/" +1 +"/");
           }
           else{
             clearInterval(this.retryConnectionInterval);
