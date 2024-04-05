@@ -1,2 +1,3 @@
 /services/.venv/
 /services/whiteboard/whiteboard/__pycache__/
+node_modules/
