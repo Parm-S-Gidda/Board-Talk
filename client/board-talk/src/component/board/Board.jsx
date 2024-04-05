@@ -20,7 +20,7 @@ class Board extends React.Component {
 
     this.socket = new WebSocket(
       "wss://" +
-        "whiteboard-service-2pmnanshaq-uw.a.run.app" +
+        "whiteboard-service-nf23qxdm2q-uc.a.run.app" +
         "/ws/whiteboard/" +
         1 +
         "/"
@@ -31,49 +31,51 @@ class Board extends React.Component {
       clearInterval(this.retryConnectionInterval);
       this.retryAttempts = 1;
 
-
       //upon opening the socket start a 2 minute timer which resets when the user sends a message
       this.startUserTimeout();
     };
 
-    this.socket.onerror = (event) =>{
-
+    this.socket.onerror = (event) => {
       console.log("error");
     };
-
 
     this.socket.onclose = (event) => {
       console.log("WebSocket connection disconnected. Trying to reconnect");
 
       //only try reconnecting if the disconnect was not due to a inactivity reconnect
-      if(!(this.timeoutClose)){
-
-
-
+      if (!this.timeoutClose) {
         //client will try to reconnect to server every 3 seconds of being disconnected while still on page
         this.retryConnectionInterval = setInterval(() => {
-
-          if(this.retryAttempts < 6){
-
-            console.log("Trying to reconnect. Attempt: " + this.retryAttempts + "/5");
-            this.socket = new WebSocket("wss://" +"whiteboard-service-ljofwenvaq-uw.a.run.app" +"/ws/whiteboard/" +1 +"/");
-          }
-          else{
+          if (this.retryAttempts < 6) {
+            console.log(
+              "Trying to reconnect. Attempt: " + this.retryAttempts + "/5"
+            );
+            this.socket = new WebSocket(
+              "wss://" +
+                "whiteboard-service-ljofwenvaq-uw.a.run.app" +
+                "/ws/whiteboard/" +
+                1 +
+                "/"
+            );
+          } else {
             clearInterval(this.retryConnectionInterval);
-            if(alert("Sorry, you have disconnected from our server. Press OK to try to reconnect.")){}
-            else    window.location.reload();
+            if (
+              alert(
+                "Sorry, you have disconnected from our server. Press OK to try to reconnect."
+              )
+            ) {
+            } else window.location.reload();
           }
 
           this.retryAttempts++;
         }, 3000);
-
-
-      }
-      else{
-
-
-        if(alert("You have been disconnected due to inactivity. Press OK to reconnect.")){}
-        else    window.location.reload();
+      } else {
+        if (
+          alert(
+            "You have been disconnected due to inactivity. Press OK to reconnect."
+          )
+        ) {
+        } else window.location.reload();
       }
     };
 
@@ -110,7 +112,6 @@ class Board extends React.Component {
   }
 
   startUserTimeout() {
-
     //reset the timeout clock
     clearTimeout(this.timeoutUser);
 
@@ -119,7 +120,6 @@ class Board extends React.Component {
       this.userTimeOut();
     }, 120000);
   }
-
 
   componentWillUnmount() {
     // Clear any existing timeouts and intervals
@@ -132,8 +132,7 @@ class Board extends React.Component {
     console.log("something else");
   }
 
-  userTimeOut(){
-
+  userTimeOut() {
     this.timeoutClose = true;
     //close socket due to inactivity
     this.socket.close();
