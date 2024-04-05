@@ -236,7 +236,6 @@ paths:
       x-google-backend:
         address: https://question-service-nf23qxdm2q-uc.a.run.app/api/answers
 
-<<<<<<< HEAD
   /api/questions/ping:
     options:
       summary: CORS pre-flight
@@ -283,8 +282,6 @@ paths:
       x-google-backend:
         address: https://user-service-nf23qxdm2q-uc.a.run.app/api/users/ping
 
-=======
->>>>>>> socket-retry-vinci
 securityDefinitions:
   firebase:
     authorizationUrl: ""
