@@ -153,6 +153,7 @@ function Dashboard() {
 
     while (currentRetry < MAX_RETRIES && !success) {
       try {
+        console.log("verifying this is not executing too many times.");
         const resp: AxiosResponse<QuestionsProcessed> = await axios.post(
           POST_GUESTION,
           {
@@ -165,6 +166,7 @@ function Dashboard() {
             headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
           }
         );
+        success = true;
 
         setQuestions([
           ...questions,
@@ -177,7 +179,6 @@ function Dashboard() {
           },
         ]);
 
-        success = true;
 
       } catch (error) {
         console.log("Error posting question:", error);

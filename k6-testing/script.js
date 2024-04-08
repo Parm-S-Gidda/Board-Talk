@@ -1,14 +1,16 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 
+let accessToken;
+
 export const options = {
-  // A number specifying the number of VUs to run concurrently.
-  vus: 1,
-  // A string specifying the total duration of the test run.
-  duration: '8s',
+  stages: [
+    { duration: '60s', target: 1}, // ramp to 100 users
+    {duration: '60s', target: 1}, // stay at 100 users
+  ],
 
   thresholds: {
-    http_req_duration: ['p(99)<600'],
+    http_req_duration: ['p(90)<600'],
   }
 
   // The following section contains configuration options for execution of this
@@ -52,12 +54,43 @@ export const options = {
   // }
 };
 
+export function setup() {
+   // test login and keep auth token for the rest of the API calls
+   let body = {
+    "email" : "vincivelasco@gmail.com",
+    "password": "Hello123#",
+  }
+
+  let res = http.post('https://cmpt-474.xyz/api/users/login', JSON.stringify(body), {
+    headers : {'Content-Type': 'application/json'}
+  });
+  check(res, {"Login successful" : (resp) => resp.status === 200});
+
+  let res_body = JSON.parse(res.body);
+  return { accessToken: res_body.accessToken,
+           user_id: res_body.user_id};
+}
+
+export function teardown(data) {
+  accessToken = data.accessToken;
+  // test logout
+  let res = http.post('https://cmpt-474.xyz/api/users/logout', {}, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    }
+  });
+  check(res, {"Logout successful" : (resp) => resp.status === 200});
+}
+
 // The function that defines VU logic.
 //
 // See https://grafana.com/docs/k6/latest/examples/get-started-with-k6/ to learn more
 // about authoring k6 scripts.
 //
-export default function() {
+export default function(data) {
+  let accessToken = data.accessToken;
+  let user_id = data.user_id;
 
   // test pings
   let res = http.get('https://cmpt-474.xyz/api/users/ping');
@@ -71,20 +104,20 @@ export default function() {
   sleep(0.1);
 
   // test login and keep auth token for the rest of the API calls
-  let body = {
-    "email" : "vincivelasco@gmail.com",
-    "password": "Hello123#",
-  }
+  // let body = {
+  //   "email" : "vincivelasco@gmail.com",
+  //   "password": "Hello123#",
+  // }
 
-  res = http.post('https://cmpt-474.xyz/api/users/login', JSON.stringify(body), {
-    headers : {'Content-Type': 'application/json'}
-  });
-  check(res, {"Login successful" : (resp) => resp.status === 200});
+  // res = http.post('https://cmpt-474.xyz/api/users/login', JSON.stringify(body), {
+  //   headers : {'Content-Type': 'application/json'}
+  // });
+  // check(res, {"Login successful" : (resp) => resp.status === 200});
 
-  let res_body = JSON.parse(res.body);
-  const user_id = res_body.user_id;
-  const accessToken = res_body.accessToken;
-  sleep(0.5);
+  // let res_body = JSON.parse(res.body);
+  // const user_id = res_body.user_id;
+  // const accessToken = res_body.accessToken;
+  // sleep(0.5);
 
   // test get requests for questions
   res = http.get('https://cmpt-474.xyz/api/questions', {
@@ -93,14 +126,14 @@ export default function() {
       'Content-Type': 'application/json',
     }
   });
-  check(res, {"Get questions successful" : (resp) => resp.status === 200});
+  let passed = check(res, {"Get questions successful" : (resp) => resp.status === 200});
 
-  res_body = JSON.parse(res.body);
+  let res_body = JSON.parse(res.body);
   sleep(0.5);
 
   // if there as at least 1 question, test a single get answer request
-  if (Object.keys(res_body).length > 0) {
-    const question_id = JSON.parse(res.body)[0].question_id;
+  if (passed && Object.keys(res_body).length > 0) {
+    const question_id = res_body[0].question_id;
     res = http.get('https://cmpt-474.xyz/api/questions', {
       params: question_id,
       headers: {
@@ -116,7 +149,7 @@ export default function() {
   //  *COMMENT OUT this section if you don't to do post requests as part of the testing*
   // ------------------------------------------------------------------------------------------
   // test question post request
-  body = {
+  let body = {
     "user_id" : user_id,
     "title" : "",
     "content": "This is a test as part of k6!",
@@ -147,18 +180,16 @@ export default function() {
     }
   });
   check(res, {"Post answer successful" : (resp) => resp.status === 201});
-  // ------------------------------------------------------------------------------------------
+  // // ------------------------------------------------------------------------------------------
 
-
-  sleep(0.2);
   // test logout
-  res = http.post('https://cmpt-474.xyz/api/users/logout', {}, {
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    }
-  });
-  check(res, {"Logout successful" : (resp) => resp.status === 200});
+  // res = http.post('https://cmpt-474.xyz/api/users/logout', {}, {
+  //   headers: {
+  //     'Authorization': `Bearer ${accessToken}`,
+  //     'Content-Type': 'application/json',
+  //   }
+  // });
+  // check(res, {"Logout successful" : (resp) => resp.status === 200});
 
 
   sleep(1);
