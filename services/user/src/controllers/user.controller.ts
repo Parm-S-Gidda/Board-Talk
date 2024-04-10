@@ -50,7 +50,7 @@ export const getUser = async (req: Request, res: Response) => {
   const user = await getUserService(user_id);
 
   if (user) {
-    res.setHeader("Cache-Control", "public, max-age=1");
+    // res.setHeader("Cache-Control", "public, max-age=1");
     res.status(200).json(user);
   } else {
     res.status(400).json({

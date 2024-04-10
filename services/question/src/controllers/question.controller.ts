@@ -9,7 +9,7 @@ export const getQuestions = async (req: Request, res: Response) => {
   const questions = await getQuestionsService();
 
   if (questions) {
-    res.setHeader("Cache-Control", "public, max-age=1");
+    // res.setHeader("Cache-Control", "public, max-age=1");
     res.status(200).json(questions);
   } else {
     res.status(400).json({
