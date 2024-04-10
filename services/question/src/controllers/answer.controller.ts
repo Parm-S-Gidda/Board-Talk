@@ -17,7 +17,7 @@ export const getAnswers = async (req: Request, res: Response) => {
   const answers = await getAnswersService(request);
 
   if (answers) {
-    res.setHeader("Cache-Control", "public, max-age=60");
+    res.setHeader("Cache-Control", "public, max-age=1");
     res.status(200).json(answers);
   } else {
     res.status(400).json({
