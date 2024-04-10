@@ -126,7 +126,7 @@ function Question() {
       }
 
       if (!success) {
-        alert('Server is currently unavailable. Please try again later');
+        alert("Server is currently unavailable. Please try again later");
       }
     };
 
@@ -136,6 +136,7 @@ function Question() {
   const { user, updateUser } = useUser();
 
   const onPost = async () => {
+    setPostAnswer("");
     let currentRetry = 0;
     let success = false;
     let newAnswers: AnswerProcessed[] = [];
@@ -190,11 +191,13 @@ function Question() {
     }
 
     if (!success) {
-      alert('Server is currently unavailable. Please try again later');
+      alert("Server is currently unavailable. Please try again later");
     }
 
     if (newAnswers.length > 0) {
-      setAnswers(prevAnswers => prevAnswers ? [...prevAnswers, ...newAnswers] : newAnswers);
+      setAnswers((prevAnswers) =>
+        prevAnswers ? [...prevAnswers, ...newAnswers] : newAnswers
+      );
     }
   };
 
@@ -202,7 +205,10 @@ function Question() {
     <div className="h-full w-full flex flex-col">
       <div className="h-9/10 w-full flex flex-col px-32 py-10 gap-y-5 overflow-y-auto">
         <QuestionCard question={location.state} />
-        {answers && answers.map((answer) => <AnswerCard key={answer.answer_id} answer={answer} />)}
+        {answers &&
+          answers.map((answer) => (
+            <AnswerCard key={answer.answer_id} answer={answer} />
+          ))}
       </div>
       <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center">
         <input
@@ -215,7 +221,7 @@ function Question() {
           <RiSendPlane2Fill
             color="#465858"
             size={30}
-            className="hover:cursor-pointer"
+            className="hover:cursor-pointer text-gray-700"
           />
         </div>
       </div>

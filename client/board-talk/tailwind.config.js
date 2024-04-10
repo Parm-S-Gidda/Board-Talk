@@ -6,7 +6,8 @@ module.exports = {
       colors: {
         "blue-green": "#c8dcdc",
         "mineral-green": "#465858",
-        "gulf-stream": "#70aaaa"
+        "gulf-stream": "#70aaaa",
+        "test": "#B3c5c5"
       },
       height: {
         "9/10": "90%",
@@ -19,6 +20,11 @@ module.exports = {
       },
       maxHeight: {
         "9/10": "90%"
+      },
+      backgroundSize: {
+        "0": "0% 0.15rem",
+        "100": "100% 0.15rem"
+
       }
     },
   },

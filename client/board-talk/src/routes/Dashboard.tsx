@@ -40,7 +40,6 @@ const RETRY_DELAY_MS = 1000; // 1 second
 function Dashboard() {
   const { user, updateUser } = useUser();
 
-
   console.log("token:", Cookies.get("accessToken"));
   const [questions, setQuestions] = useState<QuestionsProcessed[]>([]);
 
@@ -51,13 +50,17 @@ function Dashboard() {
 
       while (currentRetry < MAX_RETRIES && !success) {
         try {
-          const getUser = async (user_id: string): Promise<AxiosResponse<User>> => {
+          const getUser = async (
+            user_id: string
+          ): Promise<AxiosResponse<User>> => {
             return axios.get(GET_USER_ENDPOINT, {
               params: {
                 user_id,
               },
               timeout: 5000,
-              headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+              headers: {
+                Authorization: `Bearer ${Cookies.get("accessToken")}`,
+              },
             });
           };
 
@@ -66,7 +69,9 @@ function Dashboard() {
               GET_QUESTIONS_END_POINT,
               {
                 timeout: 5000,
-                headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+                headers: {
+                  Authorization: `Bearer ${Cookies.get("accessToken")}`,
+                },
               }
             );
 
@@ -117,13 +122,12 @@ function Dashboard() {
           };
 
           getQuestions()
-          .then((questions) => setQuestions(questions))
-          .catch((error: any) => {
-            console.log(error);
-          });
+            .then((questions) => setQuestions(questions))
+            .catch((error: any) => {
+              console.log(error);
+            });
 
           success = true;
-
         } catch (error) {
           console.log("Error:", error);
           currentRetry++;
@@ -132,12 +136,12 @@ function Dashboard() {
       }
 
       if (!success) {
-        alert("Server is currently unavailable. Please try again later")
+        alert("Server is currently unavailable. Please try again later");
       }
-  };
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -148,6 +152,7 @@ function Dashboard() {
   const [question, setQuestion] = useState<string>("");
 
   const onQuestionPosted = async () => {
+    setQuestion("");
     let currentRetry = 0;
     let success = false;
 
@@ -178,7 +183,6 @@ function Dashboard() {
         ]);
 
         success = true;
-
       } catch (error) {
         console.log("Error posting question:", error);
         currentRetry++;
@@ -187,7 +191,7 @@ function Dashboard() {
     }
 
     if (!success) {
-      alert("Server is currently unavailable. Please try again later")
+      alert("Server is currently unavailable. Please try again later");
     }
   };
 
@@ -206,7 +210,7 @@ function Dashboard() {
       <div className="h-1/10 w-full flex flex-row gap-x-5 bg-white py-1 px-20 items-center shadow-md">
         <input
           placeholder="Question"
-          className="bg-gray-200 px-3 h-full w-11/12 rounded-2xl outline-none"
+          className="bg-gray-200 px-3 h-full w-11/12 rounded-2xl outline-none text-gray-700"
           onChange={(e) => setQuestion(e.target.value)}
           value={question}
         />
